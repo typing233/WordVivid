@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WordVivid - AI多模态背诵辅助工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-radius: 16px;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+        }
+
+        .config-panel {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .config-panel h3 {
+            color: var(--primary-color);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .tab.active {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 3rem;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 16px;
+        }
+
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            background: #f3f4f6;
+            color: var(--text-secondary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .card-actions .btn {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f4f6;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 16px;
+            color: var(--text-secondary);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+        }
+
+        .toast.info {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .game-card {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .game-card-inner {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .game-card-inner.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .game-card-front,
+        .game-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--border-radius);
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .game-card-back {
+            transform: rotateY(180deg);
+        }
+
+        .game-progress {
+            text-align: center;
+            margin-bottom: 24px;
+            color: white;
+        }
+
+        .game-progress h3 {
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                justify-content: center;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🎨 WordVivid</div>
+            <p class="tagline">AI多模态背诵辅助工具 - 让背诵变得有趣、高效、多感官</p>
+        </header>
+
+        <div class="config-panel" id="configPanel">
+            <h3>⚙️ API配置</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>火山引擎 API Key</label>
+                    <input type="password" id="apiKey" placeholder="请输入您的API Key">
+                </div>
+                <div class="form-group">
+                    <label>对话模型名称</label>
+                    <input type="text" id="chatModel" value="doubao-seed-1.8" placeholder="如: doubao-seed-1.8">
+                </div>
+                <div class="form-group">
+                    <label>图像生成模型</label>
+                    <input type="text" id="imageModel" value="doubao-seedream-5.0-lite" placeholder="如: doubao-seedream-5.0-lite">
+                </div>
+            </div>
+            <p style="margin-top: 12px; color: var(--text-secondary); font-size: 0.9rem;">
+                💡 获取方式：登录 <a href="https://console.volcengine.com/ark" target="_blank" style="color: var(--primary-color);">火山引擎控制台</a> → 火山方舟 → API Key管理
+            </p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="generate">✨ 生成卡片</button>
+            <button class="tab" data-tab="library">📦 记忆库</button>
+            <button class="tab" data-tab="game">🎮 自测游戏</button>
+            <button class="tab" data-tab="gallery">🌐 公共画廊</button>
+        </div>
+
+        <div id="generate" class="tab-content active">
+            <div class="config-panel">
+                <h3>📝 文本输入</h3>
+                <div class="form-group">
+                    <label>输入需要背诵的文本</label>
+                    <textarea id="inputText" placeholder="例如：床前明月光，疑是地上霜。举头望明月，低头思故乡。"></textarea>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>分割模式</label>
+                        <select id="splitMode">
+                            <option value="sentence">按句子分割</option>
+                            <option value="paragraph">按段落分割</option>
+                            <option value="auto">智能分割</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>图像风格</label>
+                        <select id="imageStyle">
+                            <option value="cartoon">卡通风格</option>
+                            <option value="anime">动漫风格</option>
+                            <option value="realistic">写实风格</option>
+                            <option value="watercolor">水彩风格</option>
+                            <option value="pixel">像素风格</option>
+                            <option value="3d">3D风格</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>语音音色</label>
+                        <select id="voiceType">
+                            <option value="zh_female_shuangkuaisisi_moon_bigtts">女声 - 活泼甜美</option>
+                            <option value="zh_male_chunhou_chaoren_bigtts">男声 - 沉稳磁性</option>
+                            <option value="zh_female_wanrou_lingwei_bigtts">女声 - 温柔亲切</option>
+                            <option value="zh_male_novel_yechen_bigtts">男声 - 故事讲述</option>
+                            <option value="zh_female_child_xiaoyue_bigtts">童声 - 小女孩</option>
+                            <option value="zh_male_child_doubao_bigtts">童声 - 小男孩</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" id="splitBtn" onclick="splitText()">
+                        🔪 分割文本
+                    </button>
+                    <button class="btn btn-success" id="generateBtn" onclick="generateCards()" disabled>
+                        ✨ 生成记忆卡片
+                    </button>
+                </div>
+            </div>
+
+            <div class="config-panel hidden" id="segmentsPanel">
+                <h3>📋 文本片段</h3>
+                <div id="segmentsList"></div>
+            </div>
+
+            <div class="config-panel hidden" id="generatedCardsPanel">
+                <h3>🎴 已生成的卡片</h3>
+                <div class="cards-grid" id="generatedCards"></div>
+            </div>
+        </div>
+
+        <div id="library" class="tab-content">
+            <div class="config-panel">
+                <h3>📊 记忆库统计</h3>
+                <div class="stats-grid" id="libraryStats">
+                    <div class="stat-card">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">总卡片数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">复习次数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">0%</div>
+                        <div class="stat-label">正确率</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-panel">
+                <h3>📚 我的卡片</h3>
+                <div class="cards-grid" id="libraryCards">
+                    <p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 40px;">
+                        暂无卡片，快去生成一些记忆卡片吧！
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="game" class="tab-content">
+            <div class="config-panel">
+                <h3>🎮 开始游戏</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>游戏模式</label>
+                        <select id="gameType">
+                            <option value="image_to_text">🎨 看图猜文</option>
+                            <option value="audio_to_text">🎵 听音辨文</option>
+                            <option value="mixed">🎲 混合模式</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>卡片数量</label>
+                        <select id="cardCount">
+                            <option value="5">5张</option>
+                            <option value="10" selected>10张</option>
+                            <option value="15">15张</option>
+                            <option value="20">20张</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="margin-top: 16px;" onclick="startGame()">
+                    🚀 开始游戏
+                </button>
+            </div>
+
+            <div class="hidden" id="gameArea">
+                <div class="game-progress">
+                    <h3 id="gameStatus">准备开始...</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                    </div>
+                    <p id="gameStats" style="margin-top: 8px; opacity: 0.9;"></p>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-card-inner" id="gameCardInner">
+                        <div class="game-card-front" id="gameCardFront">
+                            <div id="gameQuestionArea"></div>
+                        </div>
+                        <div class="game-card-back" id="gameCardBack">
+                            <h3 style="margin-bottom: 16px;">📝 答案</h3>
+                            <p id="correctAnswer" style="text-align: center; font-size: 1.1rem; line-height: 1.6;"></p>
+                            <div id="answerResult" style="margin-top: 16px; font-weight: 600;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="config-panel" style="margin-top: 24px;">
+                    <div class="form-group">
+                        <label>输入你的答案</label>
+                        <textarea id="userAnswer" placeholder="请输入你记忆的内容..."></textarea>
+                    </div>
+                    <div style="display: flex; gap: 12px; margin-top: 16px;">
+                        <button class="btn btn-success" id="submitAnswerBtn" onclick="submitAnswer()">
+                            ✅ 提交答案
+                        </button>
+                        <button class="btn btn-warning" onclick="flipCard()">
+                            🔄 翻转卡片
+                        </button>
+                        <button class="btn btn-secondary" id="nextCardBtn" onclick="nextCard()" style="display: none;">
+                            ➡️ 下一题
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden" id="gameResults">
+                <div class="config-panel">
+                    <h3>🎉 游戏结束</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="finalCorrect">0</div>
+                            <div class="stat-label">答对</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="finalTotal">0</div>
+                            <div class="stat-label">总题数</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="finalRate">0%</div>
+                            <div class="stat-label">正确率</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 16px;" onclick="resetGame()">
+                        🔄 再玩一次
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="gallery" class="tab-content">
+            <div class="config-panel">
+                <h3>🌐 公共画廊</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>排序方式</label>
+                        <select id="gallerySort" onchange="loadGallery()">
+                            <option value="new">最新发布</option>
+                            <option value="hot">最热</option>
+                            <option value="popular">最受欢迎</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>搜索</label>
+                        <input type="text" id="gallerySearch" placeholder="搜索卡片...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="cards-grid" id="galleryCards">
+                <p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 40px;">
+                    暂无分享的卡片，快来分享你的创意记忆卡片吧！
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api';
+        let currentSegments = [];
+        let generatedCards = [];
+        let currentGame = null;
+        let currentGameCardIndex = 0;
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function getConfig() {
+            return {
+                apiKey: document.getElementById('apiKey').value,
+                chatModel: document.getElementById('chatModel').value,
+                imageModel: document.getElementById('imageModel').value
+            };
+        }
+
+        async function apiRequest(endpoint, method = 'GET', data = null) {
+            const config = getConfig();
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            
+            if (config.apiKey) {
+                headers['X-Volcengine-Api-Key'] = config.apiKey;
+            }
+            if (config.chatModel) {
+                headers['X-Volcengine-Chat-Model'] = config.chatModel;
+            }
+            if (config.imageModel) {
+                headers['X-Volcengine-Image-Model'] = config.imageModel;
+            }
+
+            const options = {
+                method,
+                headers
+            };
+
+            if (data && method !== 'GET') {
+                options.body = JSON.stringify(data);
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, options);
+                return await response.json();
+            } catch (error) {
+                console.error('API请求错误:', error);
+                return { success: false, error: '网络请求失败' };
+            }
+        }
+
+        async function splitText() {
+            const text = document.getElementById('inputText').value.trim();
+            if (!text) {
+                showToast('请输入文本内容', 'error');
+                return;
+            }
+
+            const splitMode = document.getElementById('splitMode').value;
+            
+            showToast('正在分割文本...', 'info');
+            
+            const result = await apiRequest('/text/process', 'POST', {
+                text,
+                split_mode: splitMode
+            });
+
+            if (result.success) {
+                currentSegments = result.data.segments;
+                renderSegments();
+                document.getElementById('segmentsPanel').classList.remove('hidden');
+                document.getElementById('generateBtn').disabled = false;
+                showToast(`成功分割为 ${result.data.total_count} 个片段`, 'success');
+            } else {
+                showToast(result.error || '分割失败', 'error');
+            }
+        }
+
+        function renderSegments() {
+            const container = document.getElementById('segmentsList');
+            container.innerHTML = currentSegments.map((seg, index) => `
+                <div style="padding: 12px; background: #f9fafb; border-radius: 8px; margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 600; color: var(--primary-color);">片段 ${index + 1}</span>
+                        <label style="display: flex; align-items: center; gap: 6px;">
+                            <input type="checkbox" checked data-index="${index}" onchange="toggleSegment(${index})">
+                            包含
+                        </label>
+                    </div>
+                    <p style="margin-top: 8px; color: var(--text-primary); line-height: 1.6;">${seg.text}</p>
+                </div>
+            `).join('');
+        }
+
+        function toggleSegment(index) {
+            currentSegments[index].selected = !currentSegments[index].selected;
+        }
+
+        async function generateCards() {
+            const config = getConfig();
+            if (!config.apiKey) {
+                showToast('请先配置API Key', 'error');
+                return;
+            }
+
+            const selectedSegments = currentSegments.filter(s => s.selected !== false);
+            if (selectedSegments.length === 0) {
+                showToast('请至少选择一个文本片段', 'error');
+                return;
+            }
+
+            const style = document.getElementById('imageStyle').value;
+            const voiceType = document.getElementById('voiceType').value;
+            const originalText = document.getElementById('inputText').value;
+
+            showToast('正在生成记忆卡片，这可能需要一些时间...', 'info');
+            
+            const result = await apiRequest('/cards/generate-batch', 'POST', {
+                segments: selectedSegments,
+                original_text: originalText,
+                style,
+                voice_type: voiceType,
+                generate_image: true,
+                generate_audio: false
+            });
+
+            if (result.success) {
+                generatedCards = result.data.cards;
+                renderGeneratedCards();
+                document.getElementById('generatedCardsPanel').classList.remove('hidden');
+                showToast(`成功生成 ${result.data.success_count} 张卡片`, 'success');
+                
+                if (result.errors && result.errors.length > 0) {
+                    showToast(`有 ${result.errors.length} 张卡片生成失败`, 'error');
+                }
+            } else {
+                showToast(result.error || '生成失败', 'error');
+            }
+        }
+
+        function renderGeneratedCards() {
+            const container = document.getElementById('generatedCards');
+            container.innerHTML = generatedCards.map(card => `
+                <div class="card">
+                    <div class="card-image">
+                        ${card.image_url ? `<img src="${card.image_url}" alt="卡片图片">` : '🖼️'}
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title">${card.text}</div>
+                        <div class="card-tags">
+                            <span class="tag">${card.style}</span>
+                        </div>
+                    </div>
+                    ${card.audio_url ? `
+                        <div style="padding: 0 16px 16px;">
+                            <audio controls class="audio-player" src="${card.audio_url}"></audio>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                const tabId = tab.dataset.tab;
+                document.getElementById(tabId).classList.add('active');
+
+                if (tabId === 'library') {
+                    loadLibrary();
+                } else if (tabId === 'gallery') {
+                    loadGallery();
+                }
+            });
+        });
+
+        async function loadLibrary() {
+            const statsResult = await apiRequest('/library/stats');
+            if (statsResult.success) {
+                const stats = statsResult.data;
+                document.querySelector('#libraryStats .stat-card:nth-child(1) .stat-value').textContent = stats.total_cards;
+                document.querySelector('#libraryStats .stat-card:nth-child(2) .stat-value').textContent = stats.total_reviews;
+                document.querySelector('#libraryStats .stat-card:nth-child(3) .stat-value').textContent = `${Math.round(stats.average_correct_rate * 100)}%`;
+            }
+
+            const listResult = await apiRequest('/library/list');
+            if (listResult.success && listResult.data.cards.length > 0) {
+                const container = document.getElementById('libraryCards');
+                container.innerHTML = listResult.data.cards.map(card => `
+                    <div class="card">
+                        <div class="card-image">
+                            ${card.image_url ? `<img src="${card.image_url}" alt="卡片图片">` : '🖼️'}
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">${card.text}</div>
+                            <div class="card-tags">
+                                <span class="tag">${card.category || 'default'}</span>
+                                <span class="tag">正确率 ${Math.round(card.correct_rate * 100)}%</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary">📖 复习</button>
+                            <button class="btn btn-warning">🗑️ 删除</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function loadGallery() {
+            const sort = document.getElementById('gallerySort').value;
+            const result = await apiRequest(`/gallery/list?sort=${sort}`);
+            
+            if (result.success && result.data.cards.length > 0) {
+                const container = document.getElementById('galleryCards');
+                container.innerHTML = result.data.cards.map(card => `
+                    <div class="card">
+                        <div class="card-image">
+                            ${card.image_url ? `<img src="${card.image_url}" alt="画廊卡片">` : '🖼️'}
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">${card.title}</div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">${card.description || ''}</p>
+                            <div class="card-tags" style="margin-top: 12px;">
+                                <span class="tag">❤️ ${card.likes}</span>
+                                <span class="tag">👁️ ${card.views}</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" onclick="likeGalleryCard('${card.gallery_id}')">❤️ 点赞</button>
+                            <button class="btn btn-primary">📥 收藏</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function likeGalleryCard(galleryId) {
+            const result = await apiRequest(`/gallery/${galleryId}/like`, 'POST');
+            if (result.success) {
+                showToast('点赞成功！', 'success');
+                loadGallery();
+            }
+        }
+
+        async function startGame() {
+            const gameType = document.getElementById('gameType').value;
+            const cardCount = parseInt(document.getElementById('cardCount').value);
+
+            const result = await apiRequest('/game/start', 'POST', {
+                game_type: gameType,
+                card_count: cardCount
+            });
+
+            if (result.success) {
+                currentGame = result.data;
+                currentGameCardIndex = 0;
+                
+                document.getElementById('gameArea').classList.remove('hidden');
+                document.getElementById('gameResults').classList.add('hidden');
+                
+                renderGameCard();
+            } else {
+                showToast(result.error || '开始游戏失败', 'error');
+            }
+        }
+
+        function renderGameCard() {
+            if (!currentGame || currentGameCardIndex >= currentGame.total_cards) {
+                endGame();
+                return;
+            }
+
+            const card = currentGame.current_card;
+            const progress = ((currentGameCardIndex + 1) / currentGame.total_cards) * 100;
+            
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('gameStatus').textContent = `第 ${currentGameCardIndex + 1} / ${currentGame.total_cards} 题`;
+            document.getElementById('gameStats').textContent = `已答: ${currentGame.total_answered || 0} | 正确: ${currentGame.total_correct || 0}`;
+
+            const questionArea = document.getElementById('gameQuestionArea');
+            const gameType = currentGame.game_type;
+
+            if (gameType === 'image_to_text' || gameType === 'mixed') {
+                questionArea.innerHTML = `
+                    <div style="font-size: 3rem; margin-bottom: 16px;">🎨</div>
+                    <h3 style="margin-bottom: 16px;">看图猜文</h3>
+                    ${card.image_url ? `<img src="${card.image_url}" style="max-width: 100%; max-height: 250px; border-radius: 8px;">` : '<p style="color: var(--text-secondary);">暂无图片</p>'}
+                `;
+            } else if (gameType === 'audio_to_text') {
+                questionArea.innerHTML = `
+                    <div style="font-size: 3rem; margin-bottom: 16px;">🎵</div>
+                    <h3 style="margin-bottom: 16px;">听音辨文</h3>
+                    ${card.audio_url ? `<audio controls class="audio-player" src="${card.audio_url}" style="width: 100%;"></audio>` : '<p style="color: var(--text-secondary);">暂无音频</p>'}
+                    <p style="margin-top: 16px; color: var(--text-secondary); font-size: 0.9rem;">播放音频，然后输入你听到的内容</p>
+                `;
+            }
+
+            document.getElementById('userAnswer').value = '';
+            document.getElementById('submitAnswerBtn').style.display = 'inline-flex';
+            document.getElementById('nextCardBtn').style.display = 'none';
+            document.getElementById('gameCardInner').classList.remove('flipped');
+        }
+
+        async function submitAnswer() {
+            const userAnswer = document.getElementById('userAnswer').value.trim();
+            if (!userAnswer) {
+                showToast('请输入答案', 'error');
+                return;
+            }
+
+            const card = currentGame.current_card;
+            const result = await apiRequest('/game/submit', 'POST', {
+                game_id: currentGame.game_id,
+                card_id: card.card_id,
+                user_answer: userAnswer
+            });
+
+            if (result.success) {
+                document.getElementById('correctAnswer').textContent = card.text || '答案已保存';
+                document.getElementById('answerResult').innerHTML = result.data.is_correct 
+                    ? '<span style="color: var(--success-color);">✅ 回答正确！</span>'
+                    : `<span style="color: var(--danger-color);">❌ 回答错误 (相似度: ${Math.round(result.data.similarity * 100)}%)</span>`;
+
+                document.getElementById('gameCardInner').classList.add('flipped');
+                document.getElementById('submitAnswerBtn').style.display = 'none';
+                
+                if (result.data.is_game_complete) {
+                    document.getElementById('nextCardBtn').textContent = '🎉 查看结果';
+                    document.getElementById('nextCardBtn').onclick = endGame;
+                } else {
+                    document.getElementById('nextCardBtn').style.display = 'inline-flex';
+                }
+
+                currentGame.total_answered = result.data.current_stats.total_answered;
+                currentGame.total_correct = result.data.current_stats.total_correct;
+            } else {
+                showToast(result.error || '提交失败', 'error');
+            }
+        }
+
+        function flipCard() {
+            document.getElementById('gameCardInner').classList.toggle('flipped');
+        }
+
+        async function nextCard() {
+            const result = await apiRequest(`/game/${currentGame.game_id}`);
+            if (result.success) {
+                currentGame.current_card = result.data.current_card;
+                currentGameCardIndex++;
+                renderGameCard();
+            }
+        }
+
+        async function endGame() {
+            const result = await apiRequest(`/game/${currentGame.game_id}/results`);
+            
+            if (result.success) {
+                const stats = result.data;
+                document.getElementById('finalCorrect').textContent = stats.total_correct;
+                document.getElementById('finalTotal').textContent = stats.total_cards;
+                document.getElementById('finalRate').textContent = `${Math.round(stats.correct_rate * 100)}%`;
+                
+                document.getElementById('gameArea').classList.add('hidden');
+                document.getElementById('gameResults').classList.remove('hidden');
+            }
+        }
+
+        function resetGame() {
+            currentGame = null;
+            currentGameCardIndex = 0;
+            document.getElementById('gameResults').classList.add('hidden');
+            document.getElementById('gameArea').classList.add('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch(`${API_BASE}/health`)
+                .then(r => r.json())
+                .then(data => {
+                    console.log('服务状态:', data);
+                    if (data.success) {
+                        showToast('服务连接成功！', 'success');
+                    }
+                })
+                .catch(() => {
+                    showToast('服务连接失败，请检查后端是否启动', 'error');
+                });
+        });
+    </script>
+</body>
+</html>
