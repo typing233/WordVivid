@@ -178,7 +178,9 @@ class VolcEngineService:
         prompt: str,
         size: Optional[str] = None,
         quality: Optional[str] = None,
-        n: int = 1
+        n: int = 1,
+        watermark: bool = True,
+        sequential_generation: str = "disabled"
     ) -> ImageGenerationResult:
         if not self.api_key:
             return ImageGenerationResult(
@@ -195,7 +197,10 @@ class VolcEngineService:
             "size": size,
             "quality": quality,
             "n": n,
-            "response_format": "b64_json"
+            "response_format": "b64_json",
+            "watermark": watermark,
+            "sequential_image_generation": sequential_generation,
+            "stream": False
         }
 
         try:

@@ -51,6 +51,16 @@ def health():
     })
 
 
+@app.route('/data/images/<filename>')
+def serve_images(filename):
+    return send_from_directory(settings.IMAGES_DIR, filename)
+
+
+@app.route('/data/audio/<filename>')
+def serve_audio_files(filename):
+    return send_from_directory(settings.AUDIO_DIR, filename)
+
+
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({
