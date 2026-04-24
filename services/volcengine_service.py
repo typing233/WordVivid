@@ -1,8 +1,7 @@
 import json
 import base64
 import uuid
-import aiohttp
-import asyncio
+import requests
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
 from datetime import datetime
@@ -70,7 +69,7 @@ class VolcEngineService:
             headers["Authorization"] = f"Bearer {self.api_key}"
         return headers
 
-    async def chat_completion(
+    def chat_completion(
         self,
         messages: List[ChatMessage],
         temperature: float = 0.7,
@@ -95,41 +94,40 @@ class VolcEngineService:
         }
 
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    self.chat_url,
-                    headers=self._get_headers(),
-                    json=payload,
-                    timeout=aiohttp.ClientTimeout(total=60)
-                ) as response:
-                    if response.status != 200:
-                        error_text = await response.text()
-                        return ChatResult(
-                            success=False,
-                            error=f"API请求失败: {response.status} - {error_text}"
-                        )
-                    
-                    data = await response.json()
-                    
-                    if "choices" in data and len(data["choices"]) > 0:
-                        choice = data["choices"][0]
-                        content = choice.get("message", {}).get("content", "")
-                        usage = data.get("usage", {})
-                        model = data.get("model", self.chat_model)
+            response = requests.post(
+                self.chat_url,
+                headers=self._get_headers(),
+                json=payload,
+                timeout=60
+            )
+            
+            if response.status_code != 200:
+                return ChatResult(
+                    success=False,
+                    error=f"API请求失败: {response.status_code} - {response.text}"
+                )
+            
+            data = response.json()
+            
+            if "choices" in data and len(data["choices"]) > 0:
+                choice = data["choices"][0]
+                content = choice.get("message", {}).get("content", "")
+                usage = data.get("usage", {})
+                model = data.get("model", self.chat_model)
+                
+                return ChatResult(
+                    success=True,
+                    content=content,
+                    model=model,
+                    usage=usage
+                )
+            else:
+                return ChatResult(
+                    success=False,
+                    error=f"API返回格式异常: {json.dumps(data)}"
+                )
                         
-                        return ChatResult(
-                            success=True,
-                            content=content,
-                            model=model,
-                            usage=usage
-                        )
-                    else:
-                        return ChatResult(
-                            success=False,
-                            error=f"API返回格式异常: {json.dumps(data)}"
-                        )
-                        
-        except asyncio.TimeoutError:
+        except requests.exceptions.Timeout:
             return ChatResult(
                 success=False,
                 error="请求超时，请稍后重试"
@@ -140,7 +138,7 @@ class VolcEngineService:
                 error=f"请求异常: {str(e)}"
             )
 
-    async def generate_image_prompt(self, text: str, style: str = "cartoon") -> str:
+    def generate_image_prompt(self, text: str, style: str = "cartoon") -> str:
         style_config = IMAGE_STYLES.get(style, IMAGE_STYLES["cartoon"])
         
         system_prompt = """你是一个专业的图像提示词生成专家，专门为记忆卡片生成适合的图像描述。
@@ -168,14 +166,14 @@ class VolcEngineService:
             ChatMessage(role="user", content=user_prompt)
         ]
         
-        result = await self.chat_completion(messages, temperature=0.8, max_tokens=500)
+        result = self.chat_completion(messages, temperature=0.8, max_tokens=500)
         
         if result.success and result.content:
             return f"{style_config['prompt_prefix']}{result.content}{style_config['suffix']}"
         else:
             return f"{style_config['prompt_prefix']}{text}{style_config['suffix']}"
 
-    async def generate_image(
+    def generate_image(
         self,
         prompt: str,
         size: Optional[str] = None,
@@ -201,39 +199,38 @@ class VolcEngineService:
         }
 
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    self.image_url,
-                    headers=self._get_headers(),
-                    json=payload,
-                    timeout=aiohttp.ClientTimeout(total=120)
-                ) as response:
-                    if response.status != 200:
-                        error_text = await response.text()
-                        return ImageGenerationResult(
-                            success=False,
-                            error=f"图像生成API请求失败: {response.status} - {error_text}"
-                        )
-                    
-                    data = await response.json()
-                    
-                    if "data" in data and len(data["data"]) > 0:
-                        image_data = data["data"][0]
-                        image_base64 = image_data.get("b64_json")
-                        revised_prompt = image_data.get("revised_prompt", prompt)
+            response = requests.post(
+                self.image_url,
+                headers=self._get_headers(),
+                json=payload,
+                timeout=120
+            )
+            
+            if response.status_code != 200:
+                return ImageGenerationResult(
+                    success=False,
+                    error=f"图像生成API请求失败: {response.status_code} - {response.text}"
+                )
+            
+            data = response.json()
+            
+            if "data" in data and len(data["data"]) > 0:
+                image_data = data["data"][0]
+                image_base64 = image_data.get("b64_json")
+                revised_prompt = image_data.get("revised_prompt", prompt)
+                
+                return ImageGenerationResult(
+                    success=True,
+                    image_base64=image_base64,
+                    revised_prompt=revised_prompt
+                )
+            else:
+                return ImageGenerationResult(
+                    success=False,
+                    error=f"图像生成API返回格式异常: {json.dumps(data)}"
+                )
                         
-                        return ImageGenerationResult(
-                            success=True,
-                            image_base64=image_base64,
-                            revised_prompt=revised_prompt
-                        )
-                    else:
-                        return ImageGenerationResult(
-                            success=False,
-                            error=f"图像生成API返回格式异常: {json.dumps(data)}"
-                        )
-                        
-        except asyncio.TimeoutError:
+        except requests.exceptions.Timeout:
             return ImageGenerationResult(
                 success=False,
                 error="图像生成请求超时，请稍后重试"
@@ -244,7 +241,7 @@ class VolcEngineService:
                 error=f"图像生成请求异常: {str(e)}"
             )
 
-    async def generate_tts(
+    def generate_tts(
         self,
         text: str,
         voice_type: str = "zh_female_shuangkuaisisi_moon_bigtts",
@@ -290,41 +287,40 @@ class VolcEngineService:
                 "Authorization": f"Bearer;{self.tts_token}"
             }
 
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    self.tts_url,
-                    headers=headers,
-                    json=payload,
-                    timeout=aiohttp.ClientTimeout(total=30)
-                ) as response:
-                    if response.status != 200:
-                        error_text = await response.text()
-                        return TTSResult(
-                            success=False,
-                            error=f"TTS API请求失败: {response.status} - {error_text}"
-                        )
-                    
-                    data = await response.json()
-                    
-                    if data.get("code") == 3000 and "data" in data:
-                        audio_base64 = data["data"]
-                        audio_bytes = base64.b64decode(audio_base64)
+            response = requests.post(
+                self.tts_url,
+                headers=headers,
+                json=payload,
+                timeout=30
+            )
+            
+            if response.status_code != 200:
+                return TTSResult(
+                    success=False,
+                    error=f"TTS API请求失败: {response.status_code} - {response.text}"
+                )
+            
+            data = response.json()
+            
+            if data.get("code") == 3000 and "data" in data:
+                audio_base64 = data["data"]
+                audio_bytes = base64.b64decode(audio_base64)
+                
+                duration = data.get("duration", 0)
+                
+                return TTSResult(
+                    success=True,
+                    audio_data=audio_bytes,
+                    duration=duration
+                )
+            else:
+                error_msg = data.get("message", "未知错误")
+                return TTSResult(
+                    success=False,
+                    error=f"TTS生成失败: {error_msg}"
+                )
                         
-                        duration = data.get("duration", 0)
-                        
-                        return TTSResult(
-                            success=True,
-                            audio_data=audio_bytes,
-                            duration=duration
-                        )
-                    else:
-                        error_msg = data.get("message", "未知错误")
-                        return TTSResult(
-                            success=False,
-                            error=f"TTS生成失败: {error_msg}"
-                        )
-                        
-        except asyncio.TimeoutError:
+        except requests.exceptions.Timeout:
             return TTSResult(
                 success=False,
                 error="TTS请求超时，请稍后重试"
@@ -335,7 +331,10 @@ class VolcEngineService:
                 error=f"TTS请求异常: {str(e)}"
             )
 
-    async def split_text_smart(self, text: str, split_mode: str = "sentence") -> List[Dict[str, Any]]:
+    def split_text_smart(self, text: str, split_mode: str = "sentence") -> List[Dict[str, Any]]:
+        if not self.api_key:
+            return self._fallback_split(text, split_mode)
+
         system_prompt = """你是一个文本分割专家，专门为背诵记忆卡片进行文本分割。
 
 分割原则：
@@ -370,7 +369,7 @@ class VolcEngineService:
             ChatMessage(role="user", content=user_prompt)
         ]
 
-        result = await self.chat_completion(messages, temperature=0.3, max_tokens=4000)
+        result = self.chat_completion(messages, temperature=0.3, max_tokens=4000)
 
         if result.success and result.content:
             try:
@@ -402,7 +401,6 @@ class VolcEngineService:
             sentences = re.split(f'({sentence_endings})', text)
             
             result = []
-            current = ""
             index = 0
             
             for i in range(0, len(sentences), 2):
@@ -421,7 +419,11 @@ class VolcEngineService:
             
             return result if result else [{"id": "seg_000", "text": text, "index": 0}]
 
-    async def calculate_similarity(self, text1: str, text2: str) -> float:
+    def calculate_similarity(self, text1: str, text2: str) -> float:
+        if not self.api_key:
+            from difflib import SequenceMatcher
+            return SequenceMatcher(None, text1, text2).ratio()
+
         system_prompt = """你是一个文本相似度评估专家。请评估两个文本之间的语义相似度，返回0到1之间的浮点数。
 
 评估标准：
@@ -445,7 +447,7 @@ class VolcEngineService:
             ChatMessage(role="user", content=user_prompt)
         ]
 
-        result = await self.chat_completion(messages, temperature=0.1, max_tokens=10)
+        result = self.chat_completion(messages, temperature=0.1, max_tokens=10)
 
         if result.success and result.content:
             try:

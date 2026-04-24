@@ -83,7 +83,7 @@ def get_voices():
 
 
 @api_bp.route('/text/process', methods=['POST'])
-async def process_text():
+def process_text():
     try:
         data = request.get_json()
         text = data.get('text', '')
@@ -96,7 +96,7 @@ async def process_text():
             }), 400
 
         volcengine = _get_volcengine_service(request.headers, data)
-        segments = await volcengine.split_text_smart(text, split_mode)
+        segments = volcengine.split_text_smart(text, split_mode)
 
         return jsonify({
             "success": True,
@@ -114,7 +114,7 @@ async def process_text():
 
 
 @api_bp.route('/cards/generate', methods=['POST'])
-async def generate_card():
+def generate_card():
     try:
         data = request.get_json()
         
@@ -128,7 +128,7 @@ async def generate_card():
         volcengine = _get_volcengine_service(request.headers, data)
         card_service = CardGeneratorService(volcengine)
         
-        result = await card_service.generate_card(
+        result = card_service.generate_card(
             user_id=data.get('user_id', 'default_user'),
             text=text,
             original_text=data.get('original_text'),
@@ -152,7 +152,7 @@ async def generate_card():
 
 
 @api_bp.route('/cards/generate-batch', methods=['POST'])
-async def generate_cards_batch():
+def generate_cards_batch():
     try:
         data = request.get_json()
         
@@ -166,7 +166,7 @@ async def generate_cards_batch():
         volcengine = _get_volcengine_service(request.headers, data)
         card_service = CardGeneratorService(volcengine)
         
-        result = await card_service.generate_cards_batch(
+        result = card_service.generate_cards_batch(
             user_id=data.get('user_id', 'default_user'),
             segments=segments,
             original_text=data.get('original_text'),
@@ -356,7 +356,7 @@ def get_game_status(game_id):
 
 
 @api_bp.route('/game/submit', methods=['POST'])
-async def submit_answer():
+def submit_answer():
     try:
         data = request.get_json()
         
@@ -370,7 +370,7 @@ async def submit_answer():
         volcengine = _get_volcengine_service(request.headers, data)
         game_service = GameService(volcengine)
         
-        result = await game_service.submit_answer(
+        result = game_service.submit_answer(
             game_id=game_id,
             card_id=data.get('card_id', ''),
             user_answer=data.get('user_answer', ''),

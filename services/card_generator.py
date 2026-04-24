@@ -1,7 +1,6 @@
 import json
 import base64
 import uuid
-import asyncio
 from typing import Dict, Any, Optional, List
 from pathlib import Path
 from datetime import datetime
@@ -112,7 +111,7 @@ class CardGeneratorService:
         card_path = user_dir / f"{card.card_id}.json"
         card_path.write_text(json.dumps(card.to_dict(), ensure_ascii=False, indent=2))
 
-    async def generate_card(
+    def generate_card(
         self,
         user_id: str,
         text: str,
@@ -145,16 +144,11 @@ class CardGeneratorService:
         )
 
         try:
-            tasks = []
-
             if generate_image:
-                tasks.append(self._generate_card_image(card, text, style))
+                self._generate_card_image(card, text, style)
 
             if generate_audio:
-                tasks.append(self._generate_card_audio(card, text, voice_type))
-
-            if tasks:
-                await asyncio.gather(*tasks)
+                self._generate_card_audio(card, text, voice_type)
 
             card.status = CardStatus.COMPLETED.value
             card.metadata.updated_at = datetime.now().isoformat()
@@ -182,10 +176,10 @@ class CardGeneratorService:
                 "error": f"卡片生成失败: {str(e)}"
             }
 
-    async def _generate_card_image(self, card: MemoryCard, text: str, style: str):
-        image_prompt = await self.volcengine.generate_image_prompt(text, style)
+    def _generate_card_image(self, card: MemoryCard, text: str, style: str):
+        image_prompt = self.volcengine.generate_image_prompt(text, style)
         
-        image_result = await self.volcengine.generate_image(image_prompt)
+        image_result = self.volcengine.generate_image(image_prompt)
         
         if image_result.success and image_result.image_base64:
             image_url = self._save_base64_image(card.card_id, image_result.image_base64)
@@ -198,8 +192,8 @@ class CardGeneratorService:
         else:
             raise Exception(f"图像生成失败: {image_result.error}")
 
-    async def _generate_card_audio(self, card: MemoryCard, text: str, voice_type: str):
-        tts_result = await self.volcengine.generate_tts(text, voice_type)
+    def _generate_card_audio(self, card: MemoryCard, text: str, voice_type: str):
+        tts_result = self.volcengine.generate_tts(text, voice_type)
         
         if tts_result.success and tts_result.audio_data:
             audio_url = self._save_audio(card.card_id, tts_result.audio_data)
@@ -212,7 +206,7 @@ class CardGeneratorService:
         else:
             raise Exception(f"语音生成失败: {tts_result.error}")
 
-    async def generate_cards_batch(
+    def generate_cards_batch(
         self,
         user_id: str,
         segments: List[Dict[str, Any]],
@@ -229,7 +223,7 @@ class CardGeneratorService:
         errors = []
 
         for segment in segments:
-            result = await self.generate_card(
+            result = self.generate_card(
                 user_id=user_id,
                 text=segment["text"],
                 original_text=original_text,

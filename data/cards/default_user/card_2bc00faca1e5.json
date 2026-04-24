@@ -1,0 +1,24 @@
+{
+  "card_id": "card_2bc00faca1e5",
+  "user_id": "default_user",
+  "text": "床前明月光，疑是地上霜，举头望明月，低头思故乡",
+  "original_text": "床前明月光，疑是地上霜，举头望明月，低头思故乡",
+  "segment_index": 0,
+  "image": {
+    "url": "/data/images/card_2bc00faca1e5.png",
+    "style": "cartoon",
+    "prompt": "可爱的卡通风格，色彩鲜艳明亮，适合儿童青少年，床前明月光，疑是地上霜，举头望明月，低头思故乡, 4K高清，细节丰富，适合记忆卡片",
+    "generated_at": "2026-04-24T20:46:26.427700"
+  },
+  "audio": null,
+  "metadata": {
+    "category": "default",
+    "tags": [],
+    "created_at": "2026-04-24T20:45:48.207209",
+    "updated_at": "2026-04-24T20:46:26.427727",
+    "review_count": 0,
+    "correct_count": 0,
+    "last_reviewed_at": null
+  },
+  "status": "completed"
+}
