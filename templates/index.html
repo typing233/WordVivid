@@ -910,7 +910,7 @@
                 container.innerHTML = listResult.data.cards.map(card => `
                     <div class="card">
                         <div class="card-image">
-                            ${card.image_url ? `<img src="${card.image_url}" alt="卡片图片">` : '🖼️'}
+                            ${card.image_url ? `<img src="${card.image_url}" alt="卡片图片" onerror="this.parentElement.innerHTML='🖼️'">` : '🖼️'}
                         </div>
                         <div class="card-content">
                             <div class="card-title">${card.text}</div>
@@ -920,12 +920,33 @@
                             </div>
                         </div>
                         <div class="card-actions">
-                            <button class="btn btn-secondary">📖 复习</button>
-                            <button class="btn btn-warning">🗑️ 删除</button>
+                            <button class="btn btn-secondary" onclick="reviewCard('${card.card_id}')">📖 复习</button>
+                            <button class="btn btn-warning" onclick="deleteLibraryCard('${card.card_id}')">🗑️ 删除</button>
                         </div>
                     </div>
                 `).join('');
             }
+        }
+
+        async function deleteLibraryCard(cardId) {
+            if (!confirm('确定要删除这张卡片吗？删除后无法恢复。')) {
+                return;
+            }
+
+            showToast('正在删除...', 'info');
+            
+            const result = await apiRequest(`/library/${cardId}`, 'DELETE');
+            
+            if (result.success) {
+                showToast('卡片已删除', 'success');
+                loadLibrary();
+            } else {
+                showToast(result.error || '删除失败', 'error');
+            }
+        }
+
+        async function reviewCard(cardId) {
+            showToast('复习功能开发中...', 'info');
         }
 
         async function loadGallery() {
