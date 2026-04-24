@@ -1,0 +1,19 @@
+{
+  "card_id": "card_e4ea7d46116a",
+  "user_id": "default_user",
+  "text": "床前明月光，疑是地上霜，举头望明月，低头思故乡",
+  "original_text": "床前明月光，疑是地上霜，举头望明月，低头思故乡",
+  "segment_index": 0,
+  "image": null,
+  "audio": null,
+  "metadata": {
+    "category": "default",
+    "tags": [],
+    "created_at": "2026-04-24T20:43:42.880602",
+    "updated_at": "2026-04-24T20:43:42.880615",
+    "review_count": 0,
+    "correct_count": 0,
+    "last_reviewed_at": null
+  },
+  "status": "failed"
+}

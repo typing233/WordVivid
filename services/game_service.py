@@ -218,7 +218,7 @@ class GameService:
             }
         }
 
-    async def submit_answer(
+    def submit_answer(
         self,
         game_id: str,
         card_id: str,
@@ -253,7 +253,7 @@ class GameService:
                 "error": f"卡片ID不匹配，当前应该回答的是卡片: {current_card.card_id}"
             }
 
-        similarity = await self.volcengine.calculate_similarity(
+        similarity = self.volcengine.calculate_similarity(
             user_answer,
             current_card.text
         )
