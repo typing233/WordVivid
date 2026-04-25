@@ -1,0 +1,52 @@
+{
+  "analysis_id": "vm_b368d3c0",
+  "user_id": "default_user",
+  "source_type": "custom",
+  "source_id": "45fb6c6a-12c9-4f9f-956f-36611002bdf9",
+  "title": "阿1",
+  "emotion_points": [
+    {
+      "segment_id": "seg_0",
+      "position": 0.5,
+      "emotion_type": "neutral",
+      "intensity": 0.3,
+      "secondary_emotions": [],
+      "timestamp": "2026-04-25T17:44:41.085550"
+    }
+  ],
+  "plot_points": [
+    {
+      "segment_id": "seg_0",
+      "position": 0.5,
+      "plot_type": "rising_action",
+      "tension_level": 0.5,
+      "description": "第 1 段",
+      "timestamp": "2026-04-25T17:44:41.085571"
+    }
+  ],
+  "character_nodes": [
+    {
+      "character_id": "char_1310cb",
+      "name": "萨法发",
+      "segment_ids": [],
+      "mentions": 0,
+      "sentiment": 0.0,
+      "importance": 0.3,
+      "attributes": {
+        "ai_description": "文本中提及的身份不明的疑似人名，无更多有效信息"
+      },
+      "position_x": 415.0,
+      "position_y": 250.0,
+      "color": "#6366f1"
+    }
+  ],
+  "character_edges": [],
+  "argument_nodes": [],
+  "argument_edges": [],
+  "summary": "待分析文本为语义不通的无意义字符组合，仅出现疑似人名「萨法发」，无法提取有效的人物关系、核心论点、主题、情节等结构化信息",
+  "themes": [],
+  "keywords": [],
+  "created_at": "2026-04-25T17:44:41.085504",
+  "updated_at": "2026-04-25T17:44:58.726272",
+  "metadata": {}
+}

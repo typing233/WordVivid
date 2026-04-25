@@ -1,0 +1,24 @@
+{
+  "card_id": "card_d7858b0d6fc2",
+  "user_id": "default_user",
+  "text": "床前明月光，",
+  "original_text": "床前明月光，疑是地上霜，举头望明月，低头思故乡",
+  "segment_index": 0,
+  "image": {
+    "url": "/data/images/card_d7858b0d6fc2.png",
+    "style": "cartoon",
+    "prompt": "可爱的卡通风格，色彩鲜艳明亮，适合儿童青少年，卡通Q版风格，色彩明亮鲜艳的马卡龙色调，线条圆润柔和，适合青少年使用。场景为古色古香的中式小卧室，浅棕色木质雕花床置于画面左侧，身着淡蓝色古风小褂的Q版小诗人半坐在床沿，睁着圆溜溜的眼睛好奇望向地面。冷白色的柔和月光从右侧的雕花木窗斜斜洒入，在床前的浅木色地板上铺出一片亮白似霜的光斑，窗外露出缀着零星碎星的深蓝色夜空和一轮圆润的银白满月，室内点缀着几缕暖黄色的微光。光影柔和自然，平视中景构图，画面饱满温馨，无尖锐元素，记忆点突出。, 4K高清，细节丰富，适合记忆卡片",
+    "generated_at": "2026-04-25T17:40:27.756091"
+  },
+  "audio": null,
+  "metadata": {
+    "category": "default",
+    "tags": [],
+    "created_at": "2026-04-25T17:39:39.490700",
+    "updated_at": "2026-04-25T17:40:27.756212",
+    "review_count": 0,
+    "correct_count": 0,
+    "last_reviewed_at": null
+  },
+  "status": "completed"
+}
