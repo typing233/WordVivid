@@ -2600,7 +2600,10 @@
         let lastAddedCardId = null;
 
         async function addNewCardToStoryline() {
-            if (!currentStoryline) return;
+            if (!currentStoryline) {
+                showToast('请先选择一个故事线', 'error');
+                return;
+            }
 
             const text = document.getElementById('newCardText').value.trim();
             if (!text) {
@@ -2616,12 +2619,15 @@
 
             hideLoading();
 
-            if (result.success) {
-                currentStoryline.cards = result.data.cards;
+            if (result.success && result.data) {
+                const cards = result.data.cards || [];
+                currentStoryline.cards = cards;
                 
-                const newCard = result.data.cards[result.data.cards.length - 1];
-                if (newCard) {
-                    lastAddedCardId = newCard.card_id;
+                if (cards.length > 0) {
+                    const newCard = cards[cards.length - 1];
+                    if (newCard) {
+                        lastAddedCardId = newCard.card_id;
+                    }
                 }
                 
                 document.getElementById('newCardText').value = '';
@@ -3530,14 +3536,27 @@
         }
 
         function highlightVividSegment(segmentIndex, scrollToView = false) {
+            if (!currentVividAnalysis) {
+                showToast('请先加载分析数据', 'error');
+                return;
+            }
+
+            if (segmentIndex === undefined || segmentIndex === null || isNaN(segmentIndex)) {
+                return;
+            }
+
             highlightedSegmentIndex = segmentIndex;
 
-            document.querySelectorAll('.heatmap-bar').forEach(bar => {
-                bar.classList.remove('highlighted');
-                if (parseInt(bar.dataset.segmentIndex) === segmentIndex) {
-                    bar.classList.add('highlighted');
-                }
-            });
+            const heatmapBars = document.querySelectorAll('.heatmap-bar');
+            if (heatmapBars.length > 0) {
+                heatmapBars.forEach(bar => {
+                    bar.classList.remove('highlighted');
+                    const barSegmentIndex = parseInt(bar.dataset.segmentIndex);
+                    if (!isNaN(barSegmentIndex) && barSegmentIndex === segmentIndex) {
+                        bar.classList.add('highlighted');
+                    }
+                });
+            }
 
             renderVividSegments();
 

@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = True
     
-    PORT: int = int(os.getenv("PORT", 9652))
+    PORT: int = int(os.getenv("PORT", 3243))
     HOST: str = os.getenv("HOST", "0.0.0.0")
     
     BASE_DIR: Path = Path(__file__).resolve().parent
