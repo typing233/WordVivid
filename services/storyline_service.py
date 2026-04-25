@@ -180,10 +180,7 @@ class StorylineService:
             self._save_storyline(storyline)
             return {
                 "success": True,
-                "data": {
-                    "merged_card": merged_card.to_dict(),
-                    "storyline": self._storyline_to_response(storyline)
-                }
+                "data": self._storyline_to_response(storyline)
             }
         else:
             return {
@@ -212,10 +209,7 @@ class StorylineService:
             self._save_storyline(storyline)
             return {
                 "success": True,
-                "data": {
-                    "new_cards": [card.to_dict() for card in new_cards],
-                    "storyline": self._storyline_to_response(storyline)
-                }
+                "data": self._storyline_to_response(storyline)
             }
         else:
             return {
@@ -265,10 +259,7 @@ class StorylineService:
         
         return {
             "success": True,
-            "data": {
-                "card": card.to_dict(),
-                "storyline": self._storyline_to_response(storyline)
-            }
+            "data": self._storyline_to_response(storyline)
         }
 
     def update_card_text(
@@ -302,10 +293,7 @@ class StorylineService:
         
         return {
             "success": True,
-            "data": {
-                "card": card.to_dict(),
-                "storyline": self._storyline_to_response(storyline)
-            }
+            "data": self._storyline_to_response(storyline)
         }
 
     def add_card(
@@ -346,10 +334,7 @@ class StorylineService:
         
         return {
             "success": True,
-            "data": {
-                "card": new_card.to_dict(),
-                "storyline": self._storyline_to_response(storyline)
-            }
+            "data": self._storyline_to_response(storyline)
         }
 
     def delete_card(
