@@ -465,6 +465,501 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 24px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 4px 8px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #f3f4f6;
+            color: var(--text-primary);
+        }
+
+        .timeline-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: grab;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .timeline-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+        }
+
+        .timeline-card.dragging {
+            opacity: 0.8;
+            transform: scale(1.02);
+            cursor: grabbing;
+        }
+
+        .timeline-card.selected {
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(99, 102, 241, 0.05));
+        }
+
+        .timeline-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+
+        .timeline-card-index {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            min-width: 32px;
+            text-align: center;
+        }
+
+        .timeline-card-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .timeline-card-content {
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .timeline-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .timeline-card-tags .tag {
+            cursor: pointer;
+        }
+
+        .timeline-card-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .timeline-card-actions .btn {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+            border-radius: 3px;
+        }
+
+        .collab-message {
+            margin-bottom: 16px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .collab-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .collab-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .collab-message.ai .collab-avatar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .collab-message.user .collab-avatar {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+        }
+
+        .collab-bubble {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            line-height: 1.6;
+            word-break: break-word;
+        }
+
+        .collab-message.ai .collab-bubble {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-bottom-left-radius: 4px;
+        }
+
+        .collab-message.user .collab-bubble {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .collab-message-meta {
+            font-size: 0.75rem;
+            margin-top: 6px;
+            opacity: 0.7;
+        }
+
+        .collab-branch-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .collab-branch-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .collab-branch-card.selected {
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(99, 102, 241, 0.05));
+        }
+
+        .collab-branch-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .collab-branch-index {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .collab-branch-text {
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 0.9rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .heatmap-container {
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .heatmap-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 180px;
+            gap: 4px;
+            padding: 0 8px;
+        }
+
+        .heatmap-bar {
+            flex: 1;
+            min-width: 20px;
+            border-radius: 4px 4px 0 0;
+            transition: all 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .heatmap-bar:hover {
+            opacity: 0.8;
+            transform: scaleX(1.1);
+        }
+
+        .heatmap-bar.highlighted {
+            box-shadow: 0 0 0 3px var(--primary-color);
+        }
+
+        .heatmap-bar-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-primary);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 10;
+        }
+
+        .heatmap-bar:hover .heatmap-bar-tooltip {
+            opacity: 1;
+        }
+
+        .heatmap-x-labels {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 8px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            overflow: hidden;
+            gap: 4px;
+            padding: 0 8px;
+        }
+
+        .heatmap-x-label {
+            flex: 1;
+            text-align: center;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .graph-container {
+            position: relative;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .graph-node {
+            position: absolute;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            z-index: 1;
+            text-align: center;
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .graph-node:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+
+        .graph-node.highlighted {
+            box-shadow: 0 0 0 3px var(--primary-color);
+            transform: scale(1.15);
+            z-index: 15;
+        }
+
+        .graph-node.character {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .graph-node.argument {
+            background: linear-gradient(135deg, var(--accent-color), #db2777);
+            color: white;
+        }
+
+        .graph-edge {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform-origin: left center;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        .graph-edge-label {
+            position: absolute;
+            background: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            border: 1px solid #e5e7eb;
+            z-index: 1;
+            white-space: nowrap;
+        }
+
+        .vivid-segment {
+            padding: 16px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .vivid-segment:hover {
+            border-color: var(--primary-color);
+        }
+
+        .vivid-segment.highlighted {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+        }
+
+        .vivid-segment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .vivid-segment-index {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .vivid-segment-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .vivid-segment-text {
+            line-height: 1.6;
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .selection-mode-indicator {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .selection-mode-indicator span {
+            background: white;
+            color: var(--warning-color);
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
     </style>
 </head>
 <body>
@@ -498,6 +993,9 @@
         <div class="tabs">
             <button class="tab active" data-tab="generate">✨ 生成卡片</button>
             <button class="tab" data-tab="library">📦 记忆库</button>
+            <button class="tab" data-tab="storyline">📜 故事线卡片</button>
+            <button class="tab" data-tab="collab">🤝 AI共创</button>
+            <button class="tab" data-tab="vivid">🔍 Vivid镜像</button>
             <button class="tab" data-tab="game">🎮 自测游戏</button>
             <button class="tab" data-tab="gallery">🌐 公共画廊</button>
         </div>
@@ -706,6 +1204,230 @@
                 <p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 40px;">
                     暂无分享的卡片，快来分享你的创意记忆卡片吧！
                 </p>
+            </div>
+        </div>
+
+        <div id="storyline" class="tab-content">
+            <div class="config-panel">
+                <h3>📜 故事线列表</h3>
+                <div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="showCreateStorylineModal()">
+                        ➕ 新建故事线
+                    </button>
+                    <button class="btn btn-secondary" onclick="loadStorylines()">
+                        🔄 刷新列表
+                    </button>
+                </div>
+                <div id="storylineList" class="cards-grid">
+                    <p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 40px;">
+                        暂无故事线，点击"新建故事线"开始创建
+                    </p>
+                </div>
+            </div>
+
+            <div id="storylineDetail" class="config-panel hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                    <h3 id="storylineDetailTitle">📜 故事线详情</h3>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn btn-warning" onclick="toggleCardSelectionMode()">
+                            ✅ 选择模式
+                        </button>
+                        <button class="btn btn-danger" onclick="mergeSelectedCards()">
+                            🔗 合并选中
+                        </button>
+                        <button class="btn btn-secondary" onclick="backToStorylineList()">
+                            ← 返回列表
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="timelineContainer" style="position: relative; min-height: 400px; padding: 20px 0;">
+                    <div id="timelineCards" style="display: flex; flex-direction: column; gap: 16px; position: relative;">
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e5e7eb;">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>在末尾添加卡片</label>
+                            <textarea id="newCardText" placeholder="输入新卡片的内容..." rows="2"></textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn-success" onclick="addNewCardToStoryline()">
+                        ➕ 添加卡片
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="collab" class="tab-content">
+            <div class="config-panel">
+                <h3>🤝 AI共创会话</h3>
+                <div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="showCreateCollabModal()">
+                        ➕ 新建协作
+                    </button>
+                    <button class="btn btn-secondary" onclick="loadCollabSessions()">
+                        🔄 刷新列表
+                    </button>
+                </div>
+                <div id="collabSessionList" class="cards-grid">
+                    <p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 40px;">
+                        暂无私有协作会话，点击"新建协作"开始与AI共创
+                    </p>
+                </div>
+            </div>
+
+            <div id="collabDetail" class="config-panel hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                    <h3 id="collabDetailTitle">🤝 协作写作</h3>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn btn-warning" onclick="showCollabSettings()">
+                            ⚙️ 设置
+                        </button>
+                        <button class="btn btn-secondary" onclick="backToCollabList()">
+                            ← 返回列表
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-grid" style="margin-bottom: 16px;">
+                    <div class="form-group">
+                        <label>选择写作风格</label>
+                        <select id="collabStyleSelect" onchange="setCollabStyle()">
+                            <option value="">默认风格</option>
+                            <option value="lock_user">锁定用户文风</option>
+                            <option value="lu_xun">鲁迅风格</option>
+                            <option value="jin_yong">金庸风格</option>
+                            <option value="zhang_ailing">张爱玲风格</option>
+                            <option value="mo_yan">莫言风格</option>
+                            <option value="poetic">诗意风格</option>
+                            <option value="dramatic">戏剧风格</option>
+                            <option value="philosophical">哲思风格</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>选择世界观设定</label>
+                        <select id="collabWorldSettingSelect">
+                            <option value="">无预设</option>
+                            <option value="xianxia">仙侠世界</option>
+                            <option value="western_fantasy">西方奇幻</option>
+                            <option value="modern_city">现代都市</option>
+                            <option value="historical">历史架空</option>
+                            <option value="sci_fi">科幻未来</option>
+                            <option value="horror">悬疑恐怖</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="collabChatArea" style="max-height: 500px; overflow-y: auto; border: 2px solid #e5e7eb; border-radius: 12px; padding: 16px; margin-bottom: 16px; background: #fafafa;">
+                    <p style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                        开始你的协作创作之旅吧！
+                    </p>
+                </div>
+
+                <div id="collabBranchesArea" class="hidden" style="margin-bottom: 16px;">
+                    <h4 style="margin-bottom: 12px; color: var(--primary-color);">🔀 AI续写分支选择</h4>
+                    <div id="collabBranchesList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label id="collabTurnIndicator">✍️ 轮到你写作了</label>
+                    <textarea id="collabUserInput" placeholder="输入你的内容..." rows="3" style="width: 100%;"></textarea>
+                </div>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button class="btn btn-success" id="collabSendBtn" onclick="collabUserSend()">
+                        ✅ 发送
+                    </button>
+                    <button class="btn btn-primary" id="collabAIContinueBtn" onclick="collabAIContinue()">
+                        🤖 让AI续写
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="vivid" class="tab-content">
+            <div class="config-panel">
+                <h3>🔍 Vivid镜像分析</h3>
+                <div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="showCreateVividModal()">
+                        ➕ 新建分析
+                    </button>
+                    <button class="btn btn-secondary" onclick="loadVividAnalyses()">
+                        🔄 刷新列表
+                    </button>
+                </div>
+                <div id="vividAnalysisList" class="cards-grid">
+                    <p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 40px;">
+                        暂无分析记录，点击"新建分析"开始分析你的文本
+                    </p>
+                </div>
+            </div>
+
+            <div id="vividDetail" class="config-panel hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                    <h3 id="vividDetailTitle">🔍 Vivid镜像分析详情</h3>
+                    <button class="btn btn-secondary" onclick="backToVividList()">
+                        ← 返回列表
+                    </button>
+                </div>
+
+                <div class="tabs" style="margin-bottom: 16px;">
+                    <button class="tab active" data-vivid-tab="heatmap">📊 热力图</button>
+                    <button class="tab" data-vivid-tab="character">👥 角色图谱</button>
+                    <button class="tab" data-vivid-tab="argument">💡 论点图谱</button>
+                    <button class="tab" data-vivid-tab="segments">📝 原文段落</button>
+                </div>
+
+                <div id="vividTabHeatmap" class="vivid-tab-content active">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div>
+                            <h4 style="margin-bottom: 12px;">😊 情感热力图</h4>
+                            <div id="emotionHeatmapContainer" style="height: 250px; background: #fafafa; border-radius: 12px; padding: 16px; position: relative;">
+                                <p style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                                    暂无情感数据
+                                </p>
+                            </div>
+                            <div id="emotionLegend" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; font-size: 0.85rem;">
+                            </div>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom: 12px;">🎭 情节热力图</h4>
+                            <div id="plotHeatmapContainer" style="height: 250px; background: #fafafa; border-radius: 12px; padding: 16px; position: relative;">
+                                <p style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                                    暂无情节数据
+                                </p>
+                            </div>
+                            <div id="plotLegend" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; font-size: 0.85rem;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="vividTabCharacter" class="vivid-tab-content hidden">
+                    <h4 style="margin-bottom: 12px;">👥 角色关系图谱</h4>
+                    <div id="characterGraphContainer" style="height: 400px; background: #fafafa; border-radius: 12px; padding: 16px; position: relative;">
+                        <p style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                            暂无角色数据（点击图谱节点可跳转到对应段落）
+                        </p>
+                    </div>
+                </div>
+
+                <div id="vividTabArgument" class="vivid-tab-content hidden">
+                    <h4 style="margin-bottom: 12px;">💡 论点关系图谱</h4>
+                    <div id="argumentGraphContainer" style="height: 400px; background: #fafafa; border-radius: 12px; padding: 16px; position: relative;">
+                        <p style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                            暂无论点数据（点击图谱节点可跳转到对应段落）
+                        </p>
+                    </div>
+                </div>
+
+                <div id="vividTabSegments" class="vivid-tab-content hidden">
+                    <h4 style="margin-bottom: 12px;">📝 原文段落（点击热力图或图谱节点可高亮对应段落）</h4>
+                    <div id="vividSegmentsList" style="max-height: 500px; overflow-y: auto;">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1128,6 +1850,1365 @@
                     showToast('服务连接失败，请检查后端是否启动', 'error');
                 });
         });
+        let currentStoryline = null;
+        let currentStorylineSelectionMode = false;
+        let selectedCardIds = [];
+        let currentCollabSession = null;
+        let currentCollabBranches = [];
+        let currentVividAnalysis = null;
+        let highlightedSegmentIndex = null;
+
+        function createModal(title, content, onClose) {
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            overlay.innerHTML = `
+                <div class="modal">
+                    <div class="modal-header">
+                        <h3>${title}</h3>
+                        <button class="modal-close" onclick="this.closest('.modal-overlay').remove(); ${onClose ? onClose : ''}">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        ${content}
+                    </div>
+                </div>
+            `;
+            
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.remove();
+                    if (onClose) eval(onClose);
+                }
+            });
+            
+            document.body.appendChild(overlay);
+            return overlay;
+        }
+
+        function showCreateStorylineModal() {
+            const content = `
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>故事线标题</label>
+                        <input type="text" id="storylineTitle" placeholder="例如：我的第一篇小说" value="">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label>描述（可选）</label>
+                    <textarea id="storylineDescription" placeholder="描述这个故事线的内容..." rows="2"></textarea>
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label>文本内容（将自动按段落拆分）</label>
+                    <textarea id="storylineText" placeholder="输入你的文本内容，段落之间用空行分隔..." rows="8"></textarea>
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label>分割模式</label>
+                    <select id="storylineSplitMode">
+                        <option value="paragraph">按段落分割</option>
+                        <option value="sentence">按句子分割</option>
+                        <option value="chapter">按章节分割</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label>标签（用逗号分隔）</label>
+                    <input type="text" id="storylineTags" placeholder="例如：小说,创作,第一章">
+                </div>
+                <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove();">取消</button>
+                    <button class="btn btn-primary" onclick="createStoryline()">创建故事线</button>
+                </div>
+            `;
+            createModal('📜 新建故事线', content);
+        }
+
+        async function createStoryline() {
+            const title = document.getElementById('storylineTitle').value.trim();
+            if (!title) {
+                showToast('请输入故事线标题', 'error');
+                return;
+            }
+
+            const description = document.getElementById('storylineDescription').value.trim();
+            const text = document.getElementById('storylineText').value.trim();
+            const splitMode = document.getElementById('storylineSplitMode').value;
+            const tagsInput = document.getElementById('storylineTags').value.trim();
+            const tags = tagsInput ? tagsInput.split(/[,，]/).map(t => t.trim()).filter(t => t) : [];
+
+            showToast('正在创建故事线...', 'info');
+            
+            const result = await apiRequest('/storyline/create', 'POST', {
+                title,
+                description: description || undefined,
+                text: text || undefined,
+                split_mode: splitMode,
+                tags: tags.length > 0 ? tags : undefined
+            });
+
+            if (result.success) {
+                showToast('故事线创建成功！', 'success');
+                document.querySelector('.modal-overlay').remove();
+                loadStorylines();
+            } else {
+                showToast(result.error || '创建失败', 'error');
+            }
+        }
+
+        async function loadStorylines() {
+            const result = await apiRequest('/storyline/list');
+            const container = document.getElementById('storylineList');
+            
+            if (result.success && result.data.storylines.length > 0) {
+                container.innerHTML = result.data.storylines.map(sl => `
+                    <div class="card" onclick="openStoryline('${sl.storyline_id}')" style="cursor: pointer;">
+                        <div class="card-image" style="height: 100px; font-size: 2rem;">📜</div>
+                        <div class="card-content">
+                            <div class="card-title">${sl.title}</div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">${sl.description || '暂无描述'}</p>
+                            <div class="card-tags" style="margin-top: 12px;">
+                                <span class="tag">${sl.card_count} 张卡片</span>
+                                ${(sl.tags || []).slice(0, 2).map(t => `<span class="tag">${t}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" onclick="event.stopPropagation(); openStoryline('${sl.storyline_id}')">📖 打开</button>
+                            <button class="btn btn-danger" onclick="event.stopPropagation(); deleteStoryline('${sl.storyline_id}')">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = `
+                    <p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 40px;">
+                        暂无故事线，点击"新建故事线"开始创建
+                    </p>
+                `;
+            }
+        }
+
+        async function openStoryline(storylineId) {
+            showToast('正在加载故事线...', 'info');
+            const result = await apiRequest(`/storyline/${storylineId}`);
+            
+            if (result.success) {
+                currentStoryline = result.data;
+                document.getElementById('storylineDetailTitle').textContent = `📜 ${currentStoryline.title}`;
+                document.getElementById('storylineList').closest('.config-panel').classList.add('hidden');
+                document.getElementById('storylineDetail').classList.remove('hidden');
+                renderStorylineCards();
+                showToast('故事线加载成功', 'success');
+            } else {
+                showToast(result.error || '加载失败', 'error');
+            }
+        }
+
+        function backToStorylineList() {
+            currentStoryline = null;
+            currentStorylineSelectionMode = false;
+            selectedCardIds = [];
+            document.getElementById('storylineDetail').classList.add('hidden');
+            document.getElementById('storylineList').closest('.config-panel').classList.remove('hidden');
+            loadStorylines();
+        }
+
+        async function deleteStoryline(storylineId) {
+            if (!confirm('确定要删除这个故事线吗？所有卡片都将被删除，无法恢复。')) {
+                return;
+            }
+
+            showToast('正在删除...', 'info');
+            const result = await apiRequest(`/storyline/${storylineId}`, 'DELETE');
+            
+            if (result.success) {
+                showToast('故事线已删除', 'success');
+                loadStorylines();
+            } else {
+                showToast(result.error || '删除失败', 'error');
+            }
+        }
+
+        function renderStorylineCards() {
+            const container = document.getElementById('timelineCards');
+            
+            if (!currentStoryline || !currentStoryline.cards || currentStoryline.cards.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📝</div>
+                        <p>暂无卡片，在下方添加第一张卡片</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const cards = currentStoryline.cards.sort((a, b) => a.index - b.index);
+            
+            container.innerHTML = cards.map((card, idx) => `
+                <div class="timeline-card ${selectedCardIds.includes(card.card_id) ? 'selected' : ''}" 
+                     data-card-id="${card.card_id}" 
+                     data-index="${card.index}"
+                     draggable="true"
+                     ondragstart="handleCardDragStart(event, '${card.card_id}')"
+                     ondragover="handleCardDragOver(event)"
+                     ondrop="handleCardDrop(event, '${card.card_id}')"
+                     ondragend="handleCardDragEnd(event)">
+                    <div class="timeline-card-header">
+                        <span class="timeline-card-index">${card.index + 1}</span>
+                        ${currentStorylineSelectionMode ? `
+                            <label class="timeline-card-checkbox">
+                                <input type="checkbox" ${selectedCardIds.includes(card.card_id) ? 'checked' : ''} 
+                                       onchange="toggleCardSelection('${card.card_id}', this.checked)">
+                                选中
+                            </label>
+                        ` : ''}
+                    </div>
+                    <div class="timeline-card-content" ondblclick="editCardText('${card.card_id}')">${escapeHtml(card.text)}</div>
+                    <div class="timeline-card-tags">
+                        ${(card.tags || []).map(tag => `<span class="tag" onclick="editCardTags('${card.card_id}')">${escapeHtml(tag)}</span>`).join('')}
+                        <span class="tag" style="background: transparent; border: 1px dashed #d1d5db; color: #9ca3af; cursor: pointer;" onclick="editCardTags('${card.card_id}')">+ 添加标签</span>
+                    </div>
+                    <div class="timeline-card-actions">
+                        <button class="btn btn-secondary" onclick="editCardText('${card.card_id}')">✏️ 编辑</button>
+                        <button class="btn btn-warning" onclick="splitCard('${card.card_id}')">✂️ 拆分</button>
+                        <button class="btn btn-danger" onclick="deleteCard('${card.card_id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        let draggedCardId = null;
+
+        function handleCardDragStart(e, cardId) {
+            draggedCardId = cardId;
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleCardDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleCardDrop(e, targetCardId) {
+            e.preventDefault();
+            if (draggedCardId && draggedCardId !== targetCardId) {
+                reorderCards(draggedCardId, targetCardId);
+            }
+        }
+
+        function handleCardDragEnd(e) {
+            e.target.classList.remove('dragging');
+            draggedCardId = null;
+        }
+
+        async function reorderCards(sourceCardId, targetCardId) {
+            if (!currentStoryline) return;
+
+            const cards = [...currentStoryline.cards];
+            const sourceCard = cards.find(c => c.card_id === sourceCardId);
+            const targetCard = cards.find(c => c.card_id === targetCardId);
+            
+            if (!sourceCard || !targetCard) return;
+
+            const newOrder = cards.map(c => c.card_id);
+            const sourceIdx = newOrder.indexOf(sourceCardId);
+            const targetIdx = newOrder.indexOf(targetCardId);
+            
+            newOrder.splice(sourceIdx, 1);
+            newOrder.splice(targetIdx, 0, sourceCardId);
+
+            showToast('正在更新顺序...', 'info');
+            
+            const result = await apiRequest(`/storyline/${currentStoryline.storyline_id}/reorder`, 'POST', {
+                new_order: newOrder
+            });
+
+            if (result.success) {
+                currentStoryline.cards = result.data.cards;
+                renderStorylineCards();
+                showToast('顺序已更新', 'success');
+            } else {
+                showToast(result.error || '更新失败', 'error');
+            }
+        }
+
+        function toggleCardSelectionMode() {
+            currentStorylineSelectionMode = !currentStorylineSelectionMode;
+            if (!currentStorylineSelectionMode) {
+                selectedCardIds = [];
+            }
+            renderStorylineCards();
+            
+            if (currentStorylineSelectionMode) {
+                showToast('已进入选择模式，勾选卡片后可合并', 'info');
+            }
+        }
+
+        function toggleCardSelection(cardId, checked) {
+            if (checked) {
+                if (!selectedCardIds.includes(cardId)) {
+                    selectedCardIds.push(cardId);
+                }
+            } else {
+                selectedCardIds = selectedCardIds.filter(id => id !== cardId);
+            }
+        }
+
+        function mergeSelectedCards() {
+            if (selectedCardIds.length < 2) {
+                showToast('请至少选择2张卡片进行合并', 'error');
+                return;
+            }
+
+            const cards = selectedCardIds.map(id => 
+                currentStoryline.cards.find(c => c.card_id === id)
+            ).filter(c => c).sort((a, b) => a.index - b.index);
+
+            const mergedText = cards.map(c => c.text).join('\n\n');
+
+            const content = `
+                <div class="form-group">
+                    <label>合并后的文本（可编辑）</label>
+                    <textarea id="mergeCardText" rows="8" style="width: 100%;">${mergedText}</textarea>
+                </div>
+                <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove();">取消</button>
+                    <button class="btn btn-primary" onclick="confirmMergeCards()">确认合并</button>
+                </div>
+            `;
+            createModal('🔗 合并卡片', content);
+        }
+
+        async function confirmMergeCards() {
+            const newText = document.getElementById('mergeCardText').value.trim();
+            if (!newText) {
+                showToast('合并后的文本不能为空', 'error');
+                return;
+            }
+
+            showToast('正在合并卡片...', 'info');
+            
+            const result = await apiRequest(`/storyline/${currentStoryline.storyline_id}/merge`, 'POST', {
+                card_ids: selectedCardIds,
+                new_text: newText
+            });
+
+            if (result.success) {
+                currentStoryline.cards = result.data.cards;
+                selectedCardIds = [];
+                currentStorylineSelectionMode = false;
+                document.querySelector('.modal-overlay').remove();
+                renderStorylineCards();
+                showToast('卡片合并成功', 'success');
+            } else {
+                showToast(result.error || '合并失败', 'error');
+            }
+        }
+
+        function splitCard(cardId) {
+            const card = currentStoryline.cards.find(c => c.card_id === cardId);
+            if (!card) return;
+
+            const content = `
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">在文本中选择拆分位置，用换行符分隔两部分：</p>
+                <div class="form-group">
+                    <label>原文本</label>
+                    <textarea id="splitCardPart1" rows="4" style="width: 100%; margin-bottom: 8px;">${card.text.substring(0, Math.floor(card.text.length / 2))}</textarea>
+                    <p style="text-align: center; color: var(--text-secondary); font-weight: 600;">▼ 拆分后 ▼</p>
+                    <textarea id="splitCardPart2" rows="4" style="width: 100%;">${card.text.substring(Math.floor(card.text.length / 2))}</textarea>
+                </div>
+                <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove();">取消</button>
+                    <button class="btn btn-warning" onclick="confirmSplitCard('${cardId}')">确认拆分</button>
+                </div>
+            `;
+            createModal('✂️ 拆分卡片', content);
+        }
+
+        async function confirmSplitCard(cardId) {
+            const part1 = document.getElementById('splitCardPart1').value.trim();
+            const part2 = document.getElementById('splitCardPart2').value.trim();
+
+            if (!part1 || !part2) {
+                showToast('拆分后的两部分文本都不能为空', 'error');
+                return;
+            }
+
+            showToast('正在拆分卡片...', 'info');
+            
+            const result = await apiRequest(`/storyline/${currentStoryline.storyline_id}/split`, 'POST', {
+                card_id: cardId,
+                part1_text: part1,
+                part2_text: part2
+            });
+
+            if (result.success) {
+                currentStoryline.cards = result.data.cards;
+                document.querySelector('.modal-overlay').remove();
+                renderStorylineCards();
+                showToast('卡片拆分成功', 'success');
+            } else {
+                showToast(result.error || '拆分失败', 'error');
+            }
+        }
+
+        function editCardText(cardId) {
+            const card = currentStoryline.cards.find(c => c.card_id === cardId);
+            if (!card) return;
+
+            const content = `
+                <div class="form-group">
+                    <label>编辑卡片内容</label>
+                    <textarea id="editCardTextInput" rows="8" style="width: 100%;">${card.text}</textarea>
+                </div>
+                <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove();">取消</button>
+                    <button class="btn btn-primary" onclick="confirmEditCardText('${cardId}')">保存</button>
+                </div>
+            `;
+            createModal('✏️ 编辑卡片', content);
+        }
+
+        async function confirmEditCardText(cardId) {
+            const newText = document.getElementById('editCardTextInput').value.trim();
+            if (!newText) {
+                showToast('卡片内容不能为空', 'error');
+                return;
+            }
+
+            showToast('正在保存...', 'info');
+            
+            const result = await apiRequest(`/storyline/${currentStoryline.storyline_id}/card/${cardId}/text`, 'POST', {
+                new_text: newText
+            });
+
+            if (result.success) {
+                const card = currentStoryline.cards.find(c => c.card_id === cardId);
+                if (card) card.text = newText;
+                document.querySelector('.modal-overlay').remove();
+                renderStorylineCards();
+                showToast('保存成功', 'success');
+            } else {
+                showToast(result.error || '保存失败', 'error');
+            }
+        }
+
+        function editCardTags(cardId) {
+            const card = currentStoryline.cards.find(c => c.card_id === cardId);
+            if (!card) return;
+
+            const tagsStr = (card.tags || []).join(', ');
+
+            const content = `
+                <div class="form-group">
+                    <label>编辑标签（用逗号分隔）</label>
+                    <input type="text" id="editCardTagsInput" value="${tagsStr}" placeholder="例如：开头,场景描写">
+                </div>
+                <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove();">取消</button>
+                    <button class="btn btn-primary" onclick="confirmEditCardTags('${cardId}')">保存</button>
+                </div>
+            `;
+            createModal('🏷️ 编辑标签', content);
+        }
+
+        async function confirmEditCardTags(cardId) {
+            const tagsInput = document.getElementById('editCardTagsInput').value.trim();
+            const tags = tagsInput ? tagsInput.split(/[,，]/).map(t => t.trim()).filter(t => t) : [];
+
+            showToast('正在保存...', 'info');
+            
+            const result = await apiRequest(`/storyline/${currentStoryline.storyline_id}/card/${cardId}/tags`, 'POST', {
+                tags: tags,
+                action: 'set'
+            });
+
+            if (result.success) {
+                const card = currentStoryline.cards.find(c => c.card_id === cardId);
+                if (card) card.tags = tags;
+                document.querySelector('.modal-overlay').remove();
+                renderStorylineCards();
+                showToast('标签已更新', 'success');
+            } else {
+                showToast(result.error || '保存失败', 'error');
+            }
+        }
+
+        async function deleteCard(cardId) {
+            if (!confirm('确定要删除这张卡片吗？')) {
+                return;
+            }
+
+            showToast('正在删除...', 'info');
+            
+            const result = await apiRequest(`/storyline/${currentStoryline.storyline_id}/card/${cardId}`, 'DELETE');
+
+            if (result.success) {
+                currentStoryline.cards = result.data.cards;
+                renderStorylineCards();
+                showToast('卡片已删除', 'success');
+            } else {
+                showToast(result.error || '删除失败', 'error');
+            }
+        }
+
+        async function addNewCardToStoryline() {
+            if (!currentStoryline) return;
+
+            const text = document.getElementById('newCardText').value.trim();
+            if (!text) {
+                showToast('请输入卡片内容', 'error');
+                return;
+            }
+
+            showToast('正在添加卡片...', 'info');
+            
+            const result = await apiRequest(`/storyline/${currentStoryline.storyline_id}/card`, 'POST', {
+                text: text
+            });
+
+            if (result.success) {
+                currentStoryline.cards = result.data.cards;
+                document.getElementById('newCardText').value = '';
+                renderStorylineCards();
+                showToast('卡片添加成功', 'success');
+            } else {
+                showToast(result.error || '添加失败', 'error');
+            }
+        }
+
+        function showCreateCollabModal() {
+            const content = `
+                <div class="form-group">
+                    <label>协作标题</label>
+                    <input type="text" id="collabTitle" placeholder="例如：共创小说第一章" value="">
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label>描述（可选）</label>
+                    <textarea id="collabDescription" placeholder="描述这个协作的主题..." rows="2"></textarea>
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label>初始文本（可选，作为写作的起点）</label>
+                    <textarea id="collabInitialText" placeholder="输入初始文本，AI将基于此进行续写..." rows="4"></textarea>
+                </div>
+                <div class="form-grid" style="margin-top: 16px;">
+                    <div class="form-group">
+                        <label>写作风格</label>
+                        <select id="collabCreateStyle">
+                            <option value="">默认风格</option>
+                            <option value="lock_user">锁定用户文风</option>
+                            <option value="lu_xun">鲁迅风格</option>
+                            <option value="jin_yong">金庸风格</option>
+                            <option value="zhang_ailing">张爱玲风格</option>
+                            <option value="mo_yan">莫言风格</option>
+                            <option value="poetic">诗意风格</option>
+                            <option value="dramatic">戏剧风格</option>
+                            <option value="philosophical">哲思风格</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>世界观设定</label>
+                        <select id="collabCreateWorld">
+                            <option value="">无预设</option>
+                            <option value="xianxia">仙侠世界</option>
+                            <option value="western_fantasy">西方奇幻</option>
+                            <option value="modern_city">现代都市</option>
+                            <option value="historical">历史架空</option>
+                            <option value="sci_fi">科幻未来</option>
+                            <option value="horror">悬疑恐怖</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove();">取消</button>
+                    <button class="btn btn-primary" onclick="createCollabSession()">创建协作</button>
+                </div>
+            `;
+            createModal('🤝 新建AI协作', content);
+        }
+
+        async function createCollabSession() {
+            const title = document.getElementById('collabTitle').value.trim();
+            if (!title) {
+                showToast('请输入协作标题', 'error');
+                return;
+            }
+
+            const description = document.getElementById('collabDescription').value.trim();
+            const initialText = document.getElementById('collabInitialText').value.trim();
+            const styleId = document.getElementById('collabCreateStyle').value;
+            const worldSettingId = document.getElementById('collabCreateWorld').value;
+
+            showToast('正在创建协作会话...', 'info');
+            
+            const result = await apiRequest('/collab/create', 'POST', {
+                title,
+                description: description || undefined,
+                initial_text: initialText || undefined,
+                style_id: styleId || undefined,
+                world_setting_id: worldSettingId || undefined
+            });
+
+            if (result.success) {
+                showToast('协作会话创建成功！', 'success');
+                document.querySelector('.modal-overlay').remove();
+                loadCollabSessions();
+            } else {
+                showToast(result.error || '创建失败', 'error');
+            }
+        }
+
+        async function loadCollabSessions() {
+            const result = await apiRequest('/collab/list');
+            const container = document.getElementById('collabSessionList');
+            
+            if (result.success && result.data.sessions.length > 0) {
+                container.innerHTML = result.data.sessions.map(session => `
+                    <div class="card" onclick="openCollabSession('${session.session_id}')" style="cursor: pointer;">
+                        <div class="card-image" style="height: 100px; font-size: 2rem;">🤝</div>
+                        <div class="card-content">
+                            <div class="card-title">${session.title}</div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">${session.description || '暂无描述'}</p>
+                            <div class="card-tags" style="margin-top: 12px;">
+                                <span class="tag">${session.segment_count || 0} 段内容</span>
+                                ${session.style_id ? `<span class="tag">${getStyleName(session.style_id)}</span>` : ''}
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" onclick="event.stopPropagation(); openCollabSession('${session.session_id}')">📝 继续</button>
+                            <button class="btn btn-danger" onclick="event.stopPropagation(); deleteCollabSession('${session.session_id}')">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = `
+                    <p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 40px;">
+                        暂无私有协作会话，点击"新建协作"开始与AI共创
+                    </p>
+                `;
+            }
+        }
+
+        function getStyleName(styleId) {
+            const styles = {
+                'lock_user': '用户文风',
+                'lu_xun': '鲁迅风格',
+                'jin_yong': '金庸风格',
+                'zhang_ailing': '张爱玲风格',
+                'mo_yan': '莫言风格',
+                'poetic': '诗意风格',
+                'dramatic': '戏剧风格',
+                'philosophical': '哲思风格'
+            };
+            return styles[styleId] || styleId;
+        }
+
+        async function openCollabSession(sessionId) {
+            showToast('正在加载协作会话...', 'info');
+            const result = await apiRequest(`/collab/${sessionId}`);
+            
+            if (result.success) {
+                currentCollabSession = result.data;
+                document.getElementById('collabDetailTitle').textContent = `🤝 ${currentCollabSession.title}`;
+                document.getElementById('collabSessionList').closest('.config-panel').classList.add('hidden');
+                document.getElementById('collabDetail').classList.remove('hidden');
+                
+                if (currentCollabSession.style_id) {
+                    document.getElementById('collabStyleSelect').value = currentCollabSession.style_id;
+                }
+                
+                renderCollabChat();
+                showToast('协作会话加载成功', 'success');
+            } else {
+                showToast(result.error || '加载失败', 'error');
+            }
+        }
+
+        function backToCollabList() {
+            currentCollabSession = null;
+            currentCollabBranches = [];
+            document.getElementById('collabDetail').classList.add('hidden');
+            document.getElementById('collabSessionList').closest('.config-panel').classList.remove('hidden');
+            loadCollabSessions();
+        }
+
+        async function deleteCollabSession(sessionId) {
+            if (!confirm('确定要删除这个协作会话吗？所有内容都将被删除，无法恢复。')) {
+                return;
+            }
+
+            showToast('正在删除...', 'info');
+            const result = await apiRequest(`/collab/${sessionId}`, 'DELETE');
+            
+            if (result.success) {
+                showToast('协作会话已删除', 'success');
+                loadCollabSessions();
+            } else {
+                showToast(result.error || '删除失败', 'error');
+            }
+        }
+
+        function renderCollabChat() {
+            const container = document.getElementById('collabChatArea');
+            
+            if (!currentCollabSession || !currentCollabSession.segments || currentCollabSession.segments.length === 0) {
+                container.innerHTML = `
+                    <p style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                        开始你的协作创作之旅吧！
+                    </p>
+                `;
+                document.getElementById('collabTurnIndicator').textContent = '✍️ 轮到你写作了';
+                return;
+            }
+
+            const segments = currentCollabSession.segments;
+            const lastSegment = segments[segments.length - 1];
+            
+            container.innerHTML = segments.map((seg, idx) => `
+                <div class="collab-message ${seg.author === 'user' ? 'user' : 'ai'}">
+                    <div class="collab-avatar">${seg.author === 'user' ? '👤' : '🤖'}</div>
+                    <div>
+                        <div class="collab-bubble">${escapeHtml(seg.content)}</div>
+                        <div class="collab-message-meta">${formatTime(seg.created_at)} · ${seg.author === 'user' ? '你' : 'AI'}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            if (lastSegment.author === 'user') {
+                document.getElementById('collabTurnIndicator').textContent = '🤖 轮到AI续写了，或继续添加你的内容';
+                document.getElementById('collabAIContinueBtn').disabled = false;
+            } else {
+                document.getElementById('collabTurnIndicator').textContent = '✍️ 轮到你写作了';
+                document.getElementById('collabAIContinueBtn').disabled = false;
+            }
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function formatTime(timestamp) {
+            if (!timestamp) return '刚刚';
+            const date = new Date(timestamp);
+            return date.toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        async function collabUserSend() {
+            if (!currentCollabSession) return;
+
+            const content = document.getElementById('collabUserInput').value.trim();
+            if (!content) {
+                showToast('请输入内容', 'error');
+                return;
+            }
+
+            showToast('正在发送...', 'info');
+            
+            const result = await apiRequest(`/collab/${currentCollabSession.session_id}/write`, 'POST', {
+                content: content
+            });
+
+            if (result.success) {
+                currentCollabSession = result.data;
+                document.getElementById('collabUserInput').value = '';
+                renderCollabChat();
+                hideCollabBranches();
+                showToast('内容已发送', 'success');
+            } else {
+                showToast(result.error || '发送失败', 'error');
+            }
+        }
+
+        async function collabAIContinue() {
+            if (!currentCollabSession) return;
+
+            const config = getConfig();
+            if (!config.apiKey) {
+                showToast('请先配置API Key', 'error');
+                return;
+            }
+
+            showToast('AI正在构思多个续写方向，请稍候...', 'info');
+            document.getElementById('collabAIContinueBtn').disabled = true;
+            
+            const result = await apiRequest(`/collab/${currentCollabSession.session_id}/ai-continue`, 'POST', {
+                branch_count: 3
+            });
+
+            if (result.success) {
+                currentCollabBranches = result.data.branches || [];
+                renderCollabBranches();
+                document.getElementById('collabBranchesArea').classList.remove('hidden');
+                showToast('AI已生成3个续写方向，请选择', 'success');
+            } else {
+                showToast(result.error || 'AI续写失败', 'error');
+            }
+            
+            document.getElementById('collabAIContinueBtn').disabled = false;
+        }
+
+        function renderCollabBranches() {
+            const container = document.getElementById('collabBranchesList');
+            
+            if (!currentCollabBranches || currentCollabBranches.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = currentCollabBranches.map((branch, idx) => `
+                <div class="collab-branch-card" onclick="selectCollabBranch('${branch.branch_id}')" data-branch-id="${branch.branch_id}">
+                    <div class="collab-branch-header">
+                        <span class="collab-branch-index">分支 ${idx + 1}</span>
+                    </div>
+                    <div class="collab-branch-text">${escapeHtml(branch.content)}</div>
+                </div>
+            `).join('');
+        }
+
+        function hideCollabBranches() {
+            document.getElementById('collabBranchesArea').classList.add('hidden');
+            currentCollabBranches = [];
+        }
+
+        async function selectCollabBranch(branchId) {
+            if (!currentCollabSession) return;
+
+            document.querySelectorAll('.collab-branch-card').forEach(card => {
+                card.classList.remove('selected');
+                if (card.dataset.branchId === branchId) {
+                    card.classList.add('selected');
+                }
+            });
+
+            showToast('正在确认选择...', 'info');
+            
+            const result = await apiRequest(`/collab/${currentCollabSession.session_id}/select-branch`, 'POST', {
+                branch_id: branchId
+            });
+
+            if (result.success) {
+                currentCollabSession = result.data;
+                hideCollabBranches();
+                renderCollabChat();
+                showToast('已选择此分支，继续创作吧！', 'success');
+            } else {
+                showToast(result.error || '选择失败', 'error');
+            }
+        }
+
+        async function setCollabStyle() {
+            if (!currentCollabSession) return;
+
+            const styleId = document.getElementById('collabStyleSelect').value;
+            
+            if (!styleId) {
+                showToast('已清除风格设置', 'info');
+                return;
+            }
+
+            showToast('正在设置写作风格...', 'info');
+            
+            const result = await apiRequest(`/collab/${currentCollabSession.session_id}/style`, 'POST', {
+                style_id: styleId
+            });
+
+            if (result.success) {
+                currentCollabSession = result.data;
+                showToast(`已设置为${getStyleName(styleId)}`, 'success');
+            } else {
+                showToast(result.error || '设置失败', 'error');
+            }
+        }
+
+        function showCreateVividModal() {
+            const content = `
+                <div class="form-group">
+                    <label>分析标题</label>
+                    <input type="text" id="vividTitle" placeholder="例如：《孔乙己》文本分析" value="">
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label>分析内容（按段落输入，空行分隔段落）</label>
+                    <textarea id="vividText" placeholder="输入要分析的文本内容...&#10;&#10;每个段落用空行分隔" rows="8"></textarea>
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="vividUseAI">
+                        <span>使用AI深度分析（需要API Key）</span>
+                    </label>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">
+                        AI分析将更准确地识别情感、角色和论点关系
+                    </p>
+                </div>
+                <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove();">取消</button>
+                    <button class="btn btn-primary" onclick="createVividAnalysis()">开始分析</button>
+                </div>
+            `;
+            createModal('🔍 新建Vivid分析', content);
+        }
+
+        async function createVividAnalysis() {
+            const title = document.getElementById('vividTitle').value.trim();
+            if (!title) {
+                showToast('请输入分析标题', 'error');
+                return;
+            }
+
+            const text = document.getElementById('vividText').value.trim();
+            if (!text) {
+                showToast('请输入分析内容', 'error');
+                return;
+            }
+
+            const segments = text.split(/\n\s*\n/).map(s => s.trim()).filter(s => s);
+            if (segments.length === 0) {
+                showToast('未能检测到有效段落', 'error');
+                return;
+            }
+
+            const useAI = document.getElementById('vividUseAI').checked;
+            
+            if (useAI) {
+                const config = getConfig();
+                if (!config.apiKey) {
+                    showToast('使用AI分析需要先配置API Key', 'error');
+                    return;
+                }
+            }
+
+            showToast('正在分析文本...', 'info');
+            
+            const result = await apiRequest('/vivid/analyze', 'POST', {
+                title,
+                segments: segments.map((text, idx) => ({
+                    segment_index: idx,
+                    text: text
+                })),
+                use_ai: useAI
+            });
+
+            if (result.success) {
+                showToast('分析完成！', 'success');
+                document.querySelector('.modal-overlay').remove();
+                loadVividAnalyses();
+            } else {
+                showToast(result.error || '分析失败', 'error');
+            }
+        }
+
+        async function loadVividAnalyses() {
+            const result = await apiRequest('/vivid/list');
+            const container = document.getElementById('vividAnalysisList');
+            
+            if (result.success && result.data.analyses.length > 0) {
+                container.innerHTML = result.data.analyses.map(analysis => `
+                    <div class="card" onclick="openVividAnalysis('${analysis.analysis_id}')" style="cursor: pointer;">
+                        <div class="card-image" style="height: 100px; font-size: 2rem;">🔍</div>
+                        <div class="card-content">
+                            <div class="card-title">${analysis.title}</div>
+                            <div class="card-tags" style="margin-top: 12px;">
+                                <span class="tag">${analysis.segment_count || 0} 个段落</span>
+                                <span class="tag">${(analysis.character_nodes || []).length} 个角色</span>
+                                <span class="tag">${analysis.use_ai ? 'AI分析' : '基础分析'}</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary" onclick="event.stopPropagation(); openVividAnalysis('${analysis.analysis_id}')">📊 查看</button>
+                            <button class="btn btn-danger" onclick="event.stopPropagation(); deleteVividAnalysis('${analysis.analysis_id}')">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = `
+                    <p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary); padding: 40px;">
+                        暂无分析记录，点击"新建分析"开始分析你的文本
+                    </p>
+                `;
+            }
+        }
+
+        async function openVividAnalysis(analysisId) {
+            showToast('正在加载分析结果...', 'info');
+            const result = await apiRequest(`/vivid/${analysisId}`);
+            
+            if (result.success) {
+                currentVividAnalysis = result.data;
+                document.getElementById('vividDetailTitle').textContent = `🔍 ${currentVividAnalysis.title}`;
+                document.getElementById('vividAnalysisList').closest('.config-panel').classList.add('hidden');
+                document.getElementById('vividDetail').classList.remove('hidden');
+                
+                await renderEmotionHeatmap();
+                await renderPlotHeatmap();
+                renderCharacterGraph();
+                renderArgumentGraph();
+                renderVividSegments();
+                
+                setupVividTabListeners();
+                
+                showToast('分析结果加载成功', 'success');
+            } else {
+                showToast(result.error || '加载失败', 'error');
+            }
+        }
+
+        function backToVividList() {
+            currentVividAnalysis = null;
+            highlightedSegmentIndex = null;
+            document.getElementById('vividDetail').classList.add('hidden');
+            document.getElementById('vividAnalysisList').closest('.config-panel').classList.remove('hidden');
+            loadVividAnalyses();
+        }
+
+        async function deleteVividAnalysis(analysisId) {
+            if (!confirm('确定要删除这个分析结果吗？')) {
+                return;
+            }
+
+            showToast('正在删除...', 'info');
+            const result = await apiRequest(`/vivid/${analysisId}`, 'DELETE');
+            
+            if (result.success) {
+                showToast('分析记录已删除', 'success');
+                loadVividAnalyses();
+            } else {
+                showToast(result.error || '删除失败', 'error');
+            }
+        }
+
+        function setupVividTabListeners() {
+            document.querySelectorAll('[data-vivid-tab]').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('[data-vivid-tab]').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.vivid-tab-content').forEach(c => c.classList.add('hidden'));
+                    
+                    tab.classList.add('active');
+                    const tabName = tab.dataset.vividTab;
+                    
+                    const tabMap = {
+                        'heatmap': 'vividTabHeatmap',
+                        'character': 'vividTabCharacter',
+                        'argument': 'vividTabArgument',
+                        'segments': 'vividTabSegments'
+                    };
+                    
+                    if (tabMap[tabName]) {
+                        document.getElementById(tabMap[tabName]).classList.remove('hidden');
+                    }
+                });
+            });
+        }
+
+        async function renderEmotionHeatmap() {
+            const container = document.getElementById('emotionHeatmapContainer');
+            const legendContainer = document.getElementById('emotionLegend');
+            
+            if (!currentVividAnalysis || !currentVividAnalysis.emotion_points || currentVividAnalysis.emotion_points.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 40px;">暂无情感数据</p>';
+                return;
+            }
+
+            const emotions = currentVividAnalysis.emotion_points;
+            const maxIntensity = Math.max(...emotions.map(e => e.intensity), 1);
+            
+            const emotionColors = {
+                '喜悦': '#f59e0b',
+                '快乐': '#f59e0b',
+                '悲伤': '#6366f1',
+                '恐惧': '#8b5cf6',
+                '愤怒': '#ef4444',
+                '惊讶': '#10b981',
+                '厌恶': '#78716c',
+                '平静': '#a3a3a3',
+                '期待': '#8b5cf6',
+                '信任': '#14b8a6',
+                '紧张': '#f97316',
+                '激动': '#e11d48'
+            };
+
+            container.innerHTML = `
+                <div class="heatmap-container">
+                    <div class="heatmap-bars">
+                        ${emotions.map((point, idx) => {
+                            const height = (point.intensity / maxIntensity) * 150 + 20;
+                            const color = emotionColors[point.emotion_type] || '#6366f1';
+                            return `
+                                <div class="heatmap-bar" 
+                                     style="height: ${height}px; background: ${color};"
+                                     onclick="highlightVividSegment(${point.segment_index})"
+                                     data-segment-index="${point.segment_index}">
+                                    <div class="heatmap-bar-tooltip">
+                                        ${escapeHtml(point.emotion_type)} (${Math.round(point.intensity * 100)}%)<br>
+                                        段落 ${point.segment_index + 1}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    <div class="heatmap-x-labels">
+                        ${emotions.map((point, idx) => `
+                            <div class="heatmap-x-label">${point.segment_index + 1}</div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            const uniqueEmotions = [...new Set(emotions.map(e => e.emotion_type))];
+            legendContainer.innerHTML = uniqueEmotions.map(emotion => `
+                <div class="legend-item">
+                    <div class="legend-color" style="background: ${emotionColors[emotion] || '#6366f1'};"></div>
+                    <span>${escapeHtml(emotion)}</span>
+                </div>
+            `).join('');
+        }
+
+        async function renderPlotHeatmap() {
+            const container = document.getElementById('plotHeatmapContainer');
+            const legendContainer = document.getElementById('plotLegend');
+            
+            if (!currentVividAnalysis || !currentVividAnalysis.plot_points || currentVividAnalysis.plot_points.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 40px;">暂无情节数据</p>';
+                return;
+            }
+
+            const plots = currentVividAnalysis.plot_points;
+            const maxIntensity = Math.max(...plots.map(p => p.intensity), 1);
+            
+            const plotColors = {
+                '开端': '#6366f1',
+                '发展': '#8b5cf6',
+                '高潮': '#ef4444',
+                '转折': '#f59e0b',
+                '结局': '#10b981',
+                '冲突': '#e11d48',
+                '伏笔': '#a3a3a3',
+                '悬念': '#8b5cf6',
+                '铺垫': '#06b6d4',
+                '对比': '#ec4899'
+            };
+
+            container.innerHTML = `
+                <div class="heatmap-container">
+                    <div class="heatmap-bars">
+                        ${plots.map((point, idx) => {
+                            const height = (point.intensity / maxIntensity) * 150 + 20;
+                            const color = plotColors[point.plot_type] || '#8b5cf6';
+                            return `
+                                <div class="heatmap-bar" 
+                                     style="height: ${height}px; background: ${color};"
+                                     onclick="highlightVividSegment(${point.segment_index})"
+                                     data-segment-index="${point.segment_index}">
+                                    <div class="heatmap-bar-tooltip">
+                                        ${escapeHtml(point.plot_type)} (${Math.round(point.intensity * 100)}%)<br>
+                                        段落 ${point.segment_index + 1}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    <div class="heatmap-x-labels">
+                        ${plots.map((point, idx) => `
+                            <div class="heatmap-x-label">${point.segment_index + 1}</div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            const uniquePlots = [...new Set(plots.map(p => p.plot_type))];
+            legendContainer.innerHTML = uniquePlots.map(plot => `
+                <div class="legend-item">
+                    <div class="legend-color" style="background: ${plotColors[plot] || '#8b5cf6'};"></div>
+                    <span>${escapeHtml(plot)}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderCharacterGraph() {
+            const container = document.getElementById('characterGraphContainer');
+            
+            if (!currentVividAnalysis || !currentVividAnalysis.character_nodes || currentVividAnalysis.character_nodes.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 40px;">暂无角色数据（点击图谱节点可跳转到对应段落）</p>';
+                return;
+            }
+
+            const nodes = currentVividAnalysis.character_nodes;
+            const edges = currentVividAnalysis.relationship_edges || [];
+
+            const layout = calculateGraphLayout(nodes, edges, 400, 300);
+
+            let html = '<div class="graph-container">';
+
+            html += edges.map(edge => {
+                const from = layout.positions[edge.from_id];
+                const to = layout.positions[edge.to_id];
+                if (!from || !to) return '';
+
+                const dx = to.x - from.x;
+                const dy = to.y - from.y;
+                const length = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+                return `
+                    <div class="graph-edge" 
+                         style="left: ${from.x}px; top: ${from.y}px; width: ${length}px; transform: rotate(${angle}deg);">
+                    </div>
+                    ${edge.relationship ? `
+                        <div class="graph-edge-label" 
+                             style="left: ${(from.x + to.x) / 2 - 30}px; top: ${(from.y + to.y) / 2 - 15}px;">
+                            ${escapeHtml(edge.relationship)}
+                        </div>
+                    ` : ''}
+                `;
+            }).join('');
+
+            html += nodes.map(node => {
+                const pos = layout.positions[node.node_id];
+                if (!pos) return '';
+
+                return `
+                    <div class="graph-node character" 
+                         style="left: ${pos.x - 40}px; top: ${pos.y - 20}px;"
+                         onclick="highlightVividSegmentByNode('character', '${node.node_id}')"
+                         data-node-type="character"
+                         data-node-id="${node.node_id}">
+                        ${escapeHtml(node.name)}
+                    </div>
+                `;
+            }).join('');
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function renderArgumentGraph() {
+            const container = document.getElementById('argumentGraphContainer');
+            
+            if (!currentVividAnalysis || !currentVividAnalysis.argument_nodes || currentVividAnalysis.argument_nodes.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 40px;">暂无论点数据（点击图谱节点可跳转到对应段落）</p>';
+                return;
+            }
+
+            const nodes = currentVividAnalysis.argument_nodes;
+            const edges = [];
+
+            const layout = calculateGraphLayout(nodes, edges, 400, 300);
+
+            let html = '<div class="graph-container">';
+
+            html += nodes.map(node => {
+                const pos = layout.positions[node.node_id];
+                if (!pos) return '';
+
+                return `
+                    <div class="graph-node argument" 
+                         style="left: ${pos.x - 40}px; top: ${pos.y - 20}px;"
+                         onclick="highlightVividSegmentByNode('argument', '${node.node_id}')"
+                         data-node-type="argument"
+                         data-node-id="${node.node_id}">
+                        ${escapeHtml(node.name.length > 8 ? node.name.substring(0, 8) + '...' : node.name)}
+                    </div>
+                `;
+            }).join('');
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function calculateGraphLayout(nodes, edges, width, height) {
+            const positions = {};
+            const nodeCount = nodes.length;
+            
+            if (nodeCount === 0) return { positions };
+            
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.min(width, height) / 3;
+
+            nodes.forEach((node, idx) => {
+                const angle = (2 * Math.PI * idx) / nodeCount - Math.PI / 2;
+                positions[node.node_id] = {
+                    x: centerX + radius * Math.cos(angle),
+                    y: centerY + radius * Math.sin(angle)
+                };
+            });
+
+            return { positions };
+        }
+
+        function renderVividSegments() {
+            const container = document.getElementById('vividSegmentsList');
+            
+            if (!currentVividAnalysis || !currentVividAnalysis.segments || currentVividAnalysis.segments.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 40px;">暂无段落数据</p>';
+                return;
+            }
+
+            const segments = currentVividAnalysis.segments.sort((a, b) => a.segment_index - b.segment_index);
+
+            container.innerHTML = segments.map((seg, idx) => {
+                const isHighlighted = highlightedSegmentIndex === seg.segment_index;
+                
+                const emotionPoints = (currentVividAnalysis.emotion_points || []).filter(e => e.segment_index === seg.segment_index);
+                const plotPoints = (currentVividAnalysis.plot_points || []).filter(p => p.segment_index === seg.segment_index);
+
+                return `
+                    <div class="vivid-segment ${isHighlighted ? 'highlighted' : ''}" 
+                         onclick="highlightVividSegment(${seg.segment_index}, true)"
+                         data-segment-index="${seg.segment_index}">
+                        <div class="vivid-segment-header">
+                            <span class="vivid-segment-index">段落 ${seg.segment_index + 1}</span>
+                            <div class="vivid-segment-tags">
+                                ${emotionPoints.map(e => `<span class="tag" style="background: #fef3c7; color: #92400e;">${escapeHtml(e.emotion_type)}</span>`).join('')}
+                                ${plotPoints.map(p => `<span class="tag" style="background: #e0e7ff; color: #3730a3;">${escapeHtml(p.plot_type)}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="vivid-segment-text">${escapeHtml(seg.text)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function highlightVividSegment(segmentIndex, scrollToView = false) {
+            highlightedSegmentIndex = segmentIndex;
+
+            document.querySelectorAll('.heatmap-bar').forEach(bar => {
+                bar.classList.remove('highlighted');
+                if (parseInt(bar.dataset.segmentIndex) === segmentIndex) {
+                    bar.classList.add('highlighted');
+                }
+            });
+
+            renderVividSegments();
+
+            if (scrollToView) {
+                const segmentsTab = document.querySelector('[data-vivid-tab="segments"]');
+                if (segmentsTab && !segmentsTab.classList.contains('active')) {
+                    segmentsTab.click();
+                }
+                
+                setTimeout(() => {
+                    const segmentEl = document.querySelector(`.vivid-segment[data-segment-index="${segmentIndex}"]`);
+                    if (segmentEl) {
+                        segmentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 100);
+            }
+        }
+
+        async function highlightVividSegmentByNode(nodeType, nodeId) {
+            if (!currentVividAnalysis) return;
+
+            showToast('正在查找对应段落...', 'info');
+
+            const result = await apiRequest(`/vivid/${currentVividAnalysis.analysis_id}/find-segment?node_type=${nodeType}&node_id=${nodeId}`);
+
+            if (result.success && result.data.segment_index !== undefined) {
+                highlightVividSegment(result.data.segment_index, true);
+                showToast('已定位到对应段落', 'success');
+            } else {
+                showToast('未找到对应段落', 'error');
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
     </script>
 </body>
 </html>
