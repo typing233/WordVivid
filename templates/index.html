@@ -960,6 +960,185 @@
             border-radius: 10px;
             margin-left: 8px;
         }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(99, 102, 241, 0.1);
+            backdrop-filter: blur(2px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .loading-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 48px;
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+
+        .loading-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-ring:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .loading-ring:nth-child(2) {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            left: 15%;
+            animation-delay: 0.1s;
+            animation-direction: reverse;
+            border-top-color: var(--secondary-color);
+        }
+
+        .loading-ring:nth-child(3) {
+            width: 40%;
+            height: 40%;
+            top: 30%;
+            left: 30%;
+            animation-delay: 0.2s;
+            border-top-color: var(--accent-color);
+        }
+
+        .loading-text {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .loading-dots::after {
+            content: '';
+            animation: loadingDots 1.5s infinite;
+        }
+
+        @keyframes loadingDots {
+            0% { content: ''; }
+            33% { content: '.'; }
+            66% { content: '..'; }
+            100% { content: '...'; }
+        }
+
+        .ai-thinking-icon {
+            font-size: 2.5rem;
+            animation: aiThinking 2s ease-in-out infinite;
+        }
+
+        @keyframes aiThinking {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .collab-writing-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 30px;
+            font-weight: 600;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+        }
+
+        .inline-loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .inline-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e5e7eb;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .branch-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 40px;
+        }
+
+        .branch-loading-cards {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .branch-skeleton {
+            width: 280px;
+            height: 120px;
+            background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+            background-size: 200% 100%;
+            border-radius: 12px;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .storyline-card-enter {
+            animation: cardEnter 0.4s ease-out;
+        }
+
+        @keyframes cardEnter {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .highlight-pulse {
+            animation: highlightPulse 0.6s ease-out;
+        }
+
+        @keyframes highlightPulse {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
     </style>
 </head>
 <body>
@@ -1447,6 +1626,73 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
+        let currentLoadingOverlay = null;
+
+        function showLoading(message = '加载中', options = {}) {
+            if (currentLoadingOverlay) hideLoading();
+
+            const { type = 'spinner', icon = '🤖' } = options;
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'loading-overlay';
+            
+            let loadingContent = '';
+            
+            if (type === 'ai') {
+                loadingContent = `
+                    <div class="loading-card">
+                        <div class="ai-thinking-icon">${icon}</div>
+                        <div class="loading-text loading-dots">${message}</div>
+                    </div>
+                `;
+            } else if (type === 'branch') {
+                loadingContent = `
+                    <div class="loading-card">
+                        <div class="branch-loading">
+                            <div class="loading-text loading-dots">${message}</div>
+                            <div class="branch-loading-cards" style="margin-top: 16px;">
+                                <div class="branch-skeleton"></div>
+                                <div class="branch-skeleton"></div>
+                                <div class="branch-skeleton"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                loadingContent = `
+                    <div class="loading-card">
+                        <div class="loading-spinner">
+                            <div class="loading-ring"></div>
+                            <div class="loading-ring"></div>
+                            <div class="loading-ring"></div>
+                        </div>
+                        <div class="loading-text loading-dots">${message}</div>
+                    </div>
+                `;
+            }
+            
+            overlay.innerHTML = loadingContent;
+            document.body.appendChild(overlay);
+            currentLoadingOverlay = overlay;
+        }
+
+        function hideLoading() {
+            if (currentLoadingOverlay) {
+                currentLoadingOverlay.remove();
+                currentLoadingOverlay = null;
+            }
+        }
+
+        function createInlineLoading(message = '加载中') {
+            const container = document.createElement('div');
+            container.className = 'inline-loading';
+            container.innerHTML = `
+                <div class="inline-spinner"></div>
+                <span class="loading-dots">${message}</span>
+            `;
+            return container;
+        }
+
         function getConfig() {
             return {
                 apiKey: document.getElementById('apiKey').value,
@@ -1607,7 +1853,10 @@
                 
                 tab.classList.add('active');
                 const tabId = tab.dataset.tab;
-                document.getElementById(tabId).classList.add('active');
+                const tabContent = document.getElementById(tabId);
+                if (tabContent) {
+                    tabContent.classList.add('active');
+                }
 
                 if (tabId === 'library') {
                     loadLibrary();
@@ -2348,6 +2597,8 @@
             }
         }
 
+        let lastAddedCardId = null;
+
         async function addNewCardToStoryline() {
             if (!currentStoryline) return;
 
@@ -2357,16 +2608,39 @@
                 return;
             }
 
-            showToast('正在添加卡片...', 'info');
+            showLoading('正在添加卡片...', { type: 'spinner' });
             
             const result = await apiRequest(`/storyline/${currentStoryline.storyline_id}/card`, 'POST', {
                 text: text
             });
 
+            hideLoading();
+
             if (result.success) {
                 currentStoryline.cards = result.data.cards;
+                
+                const newCard = result.data.cards[result.data.cards.length - 1];
+                if (newCard) {
+                    lastAddedCardId = newCard.card_id;
+                }
+                
                 document.getElementById('newCardText').value = '';
                 renderStorylineCards();
+                
+                setTimeout(() => {
+                    if (lastAddedCardId) {
+                        const newCardElement = document.querySelector(`[data-card-id="${lastAddedCardId}"]`);
+                        if (newCardElement) {
+                            newCardElement.classList.add('storyline-card-enter');
+                            newCardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            
+                            setTimeout(() => {
+                                newCardElement.classList.add('highlight-pulse');
+                            }, 400);
+                        }
+                    }
+                }, 50);
+                
                 showToast('卡片添加成功', 'success');
             } else {
                 showToast(result.error || '添加失败', 'error');
@@ -2622,12 +2896,14 @@
                 return;
             }
 
-            showToast('AI正在构思多个续写方向，请稍候...', 'info');
+            showLoading('AI正在构思多个续写方向', { type: 'branch' });
             document.getElementById('collabAIContinueBtn').disabled = true;
             
             const result = await apiRequest(`/collab/${currentCollabSession.session_id}/ai-continue`, 'POST', {
                 branch_count: 3
             });
+
+            hideLoading();
 
             if (result.success) {
                 currentCollabBranches = result.data.branches || [];
@@ -2688,6 +2964,96 @@
             } else {
                 showToast(result.error || '选择失败', 'error');
             }
+        }
+
+        function showCollabSettings() {
+            if (!currentCollabSession) return;
+            
+            const session = currentCollabSession;
+            const styleName = session.style_id ? getStyleName(session.style_id) : '默认风格';
+            const worldName = session.world_setting_id ? getWorldSettingName(session.world_setting_id) : '无预设';
+            
+            const content = `
+                <div class="form-group">
+                    <label>当前写作风格</label>
+                    <select id="collabSettingsStyle">
+                        <option value="">默认风格</option>
+                        <option value="lock_user" ${session.style_id === 'lock_user' ? 'selected' : ''}>锁定用户文风</option>
+                        <option value="lu_xun" ${session.style_id === 'lu_xun' ? 'selected' : ''}>鲁迅风格</option>
+                        <option value="jin_yong" ${session.style_id === 'jin_yong' ? 'selected' : ''}>金庸风格</option>
+                        <option value="zhang_ailing" ${session.style_id === 'zhang_ailing' ? 'selected' : ''}>张爱玲风格</option>
+                        <option value="mo_yan" ${session.style_id === 'mo_yan' ? 'selected' : ''}>莫言风格</option>
+                        <option value="poetic" ${session.style_id === 'poetic' ? 'selected' : ''}>诗意风格</option>
+                        <option value="dramatic" ${session.style_id === 'dramatic' ? 'selected' : ''}>戏剧风格</option>
+                        <option value="philosophical" ${session.style_id === 'philosophical' ? 'selected' : ''}>哲思风格</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label>当前世界观设定</label>
+                    <select id="collabSettingsWorld">
+                        <option value="">无预设</option>
+                        <option value="xianxia" ${session.world_setting_id === 'xianxia' ? 'selected' : ''}>仙侠世界</option>
+                        <option value="western_fantasy" ${session.world_setting_id === 'western_fantasy' ? 'selected' : ''}>西方奇幻</option>
+                        <option value="modern_city" ${session.world_setting_id === 'modern_city' ? 'selected' : ''}>现代都市</option>
+                        <option value="historical" ${session.world_setting_id === 'historical' ? 'selected' : ''}>历史架空</option>
+                        <option value="sci_fi" ${session.world_setting_id === 'sci_fi' ? 'selected' : ''}>科幻未来</option>
+                        <option value="horror" ${session.world_setting_id === 'horror' ? 'selected' : ''}>悬疑恐怖</option>
+                    </select>
+                </div>
+                <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove();">取消</button>
+                    <button class="btn btn-primary" onclick="saveCollabSettings()">保存设置</button>
+                </div>
+            `;
+            createModal('⚙️ 协作设置', content);
+        }
+
+        async function saveCollabSettings() {
+            if (!currentCollabSession) return;
+            
+            const styleId = document.getElementById('collabSettingsStyle').value;
+            const worldSettingId = document.getElementById('collabSettingsWorld').value;
+            
+            showLoading('正在保存设置...');
+            
+            try {
+                if (styleId) {
+                    const result = await apiRequest(`/collab/${currentCollabSession.session_id}/style`, 'POST', {
+                        style_id: styleId
+                    });
+                    if (result.success) {
+                        currentCollabSession = result.data;
+                    }
+                }
+                
+                if (worldSettingId) {
+                    const result = await apiRequest(`/collab/${currentCollabSession.session_id}/world-setting`, 'POST', {
+                        world_setting_id: worldSettingId
+                    });
+                    if (result.success) {
+                        currentCollabSession = result.data;
+                    }
+                }
+                
+                hideLoading();
+                document.querySelector('.modal-overlay').remove();
+                showToast('设置已保存', 'success');
+            } catch (error) {
+                hideLoading();
+                showToast('保存失败', 'error');
+            }
+        }
+
+        function getWorldSettingName(worldSettingId) {
+            const names = {
+                'xianxia': '仙侠世界',
+                'western_fantasy': '西方奇幻',
+                'modern_city': '现代都市',
+                'historical': '历史架空',
+                'sci_fi': '科幻未来',
+                'horror': '悬疑恐怖'
+            };
+            return names[worldSettingId] || worldSettingId;
         }
 
         async function setCollabStyle() {
@@ -2770,7 +3136,7 @@
                 }
             }
 
-            showToast('正在分析文本...', 'info');
+            showLoading(useAI ? 'AI正在深度分析文本...' : '正在分析文本...', { type: 'ai', icon: '🔍' });
             
             const result = await apiRequest('/vivid/analyze', 'POST', {
                 title,
@@ -2780,6 +3146,8 @@
                 })),
                 use_ai: useAI
             });
+
+            hideLoading();
 
             if (result.success) {
                 showToast('分析完成！', 'success');
